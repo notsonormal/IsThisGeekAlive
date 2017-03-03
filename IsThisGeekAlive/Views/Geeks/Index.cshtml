@@ -1,0 +1,73 @@
+@model IsThisGeekAlive.ViewModels.GeeksIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2></h2>
+
+<div class="row">    
+    <form asp-controller="Geeks" asp-action="Search" method="post" class="form-inline">
+        <div class="form-group">
+            <label asp-for="Geek.Username" class="control-label"></label>
+            <input asp-for="Geek.Username" class="form-control" />
+
+            <button type="submit" class="btn btn-primary">Search</button>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <hr />
+</div>
+
+@if (Model.Geek.DoesGeekExist)
+{
+    <div class="row">
+        <p>@Model.Geek.Username</p>
+
+        @if (Model.Geek.HasHitDangerThreshold())
+        {
+            <div class="text-danger">
+                The geek has not logged onto his computer in the last @Model.Geek.LastPingDaysAndHoursAgo()).
+            </div>
+        }
+        else if (Model.Geek.HasHitWarningThreshold())
+        {
+            <div class="text-warning">
+                The geek has not logged onto his computer in the last @Model.Geek.LastPingDaysAndHoursAgo()). 
+            </div>
+        }
+        else
+        {
+            <div>The geek has logged onto his computer within the last @Model.Geek.NotAliveWarningWindow hours.</div>
+        }
+
+        @if (Model.Geek.HasHitDangerThreshold() || Model.Geek.HasHitWarningThreshold())
+        {
+            <div>
+                The last time the user logged in was @Model.Geek.LastPingLocalTime based on the geek's timezone. 
+                Or @Model.Geek.LastPingServerTime based on this website's timezome.
+            </div>
+        }
+    </div>
+}
+
+<div class="row">
+    <hr />    
+</div>
+
+<div class="row">
+    <p>
+        Source code and more information can be found...
+    </p>
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
