@@ -70,7 +70,7 @@ namespace IsThisGeekAlive
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Geeks}/{action=Index}/{id?}");
             });
         }
     }

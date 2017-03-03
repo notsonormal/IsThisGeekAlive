@@ -31,7 +31,6 @@ namespace IsThisGeekAlive.ViewModels
         public int GeekId { get; set; }
         public string Username { get; set; }
         public string UsernameLower { get; set; }
-
         public int NotAliveWarningWindow { get; set; }
         public int NotAliveDangerWindow { get; set; }
 
@@ -49,16 +48,16 @@ namespace IsThisGeekAlive.ViewModels
 
         public bool DoesGeekExist { get; set; }
 
-        public bool HasHitWarningThreshold()
-        {
-            TimeSpan since = DateTime.UtcNow - LastPingServerTimeInUtc;
-            return since.TotalHours > NotAliveWarningWindow;
-        }
-
         public bool HasHitDangerThreshold()
         {
             TimeSpan since = DateTime.UtcNow - LastPingServerTimeInUtc;
             return since.TotalHours > NotAliveDangerWindow;
+        }
+
+        public bool HasHitWarningThreshold()
+        {
+            TimeSpan since = DateTime.UtcNow - LastPingServerTimeInUtc;
+            return since.TotalHours > NotAliveWarningWindow;
         }
 
         public string LastPingDaysAndHoursAgo()
