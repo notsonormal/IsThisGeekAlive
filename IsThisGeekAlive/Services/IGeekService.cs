@@ -8,7 +8,7 @@ namespace IsThisGeekAlive.Services
 {
     public interface IGeekService
     {
-        Geek PingGeek(string username, int notAliveWarningWindow, int notAliveDangerWindow, DateTimeOffset localTime);
+        Geek Login(string username, int notAliveWarningWindow, int notAliveDangerWindow, DateTimeOffset localTime);
         Geek GetGeekByUsername(string username);
     }
 }

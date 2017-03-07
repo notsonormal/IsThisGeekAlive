@@ -4,7 +4,9 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Timers;
 
@@ -18,9 +20,10 @@ namespace IsThisGeekAliveMonitor.Services
         public GeekPingService()
         {
             _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.WorkerSupportsCancellation = true;
             _backgroundWorker.DoWork += DoWork;
 
-            int pingInterval = Properties.Settings.Default.PingInterval;
+            int pingInterval = Properties.Settings.Default.LoginInterval;
 
             _pingTimer = new Timer();
             _pingTimer.Interval = TimeSpan.FromMinutes(pingInterval).TotalMilliseconds;
@@ -43,17 +46,20 @@ namespace IsThisGeekAliveMonitor.Services
         }
 
         void OnPingTimerElapsed(object sender, EventArgs e)
-        {            
-            _backgroundWorker.RunWorkerAsync();
+        {
+            if (!_backgroundWorker.IsBusy)
+            {
+                _backgroundWorker.RunWorkerAsync();
+            }
 
-            int pingInterval = Properties.Settings.Default.PingInterval;
+            int pingInterval = Properties.Settings.Default.LoginInterval;
             _pingTimer.Interval = TimeSpan.FromMinutes(pingInterval).TotalMilliseconds;
             _pingTimer.Start();
         }
 
         void DoWork(object sender, DoWorkEventArgs e)
         {
-            if (_backgroundWorker.IsBusy || _backgroundWorker.CancellationPending)
+            if (_backgroundWorker.CancellationPending)
                 return;
 
             string apiUrl = Properties.Settings.Default.IsThisGeekAliveApiUrl;
@@ -78,23 +84,25 @@ namespace IsThisGeekAliveMonitor.Services
 
             try
             {
-                client.Post(request);
+                var response = client.Post(request);
+                CheckForError(response);
             }
             catch(Exception ex)
             {
+                Debug.WriteLine(string.Format("Ping failed exception: {0}", ex.ToString()));
                 Messenger.Default.Send(new PingFailedMessage(ex.Message));
             }
         }
 
         RestRequest CreatePingRequest(string geekUsername, int notAliveWarningWindow, int notAliveDangerWindow)
         {
-            RestRequest request = new RestRequest()
+            RestRequest request = new RestRequest("geeks/login")
             {
                 DateFormat = DateFormat.ISO_8601,
                 RequestFormat = DataFormat.Json,
             };
 
-            request.AddBody(new Ping()
+            request.AddBody(new GeekLogin()
             {
                 Username = geekUsername,
                 LocalTime = DateTimeOffset.Now,
@@ -104,5 +112,24 @@ namespace IsThisGeekAliveMonitor.Services
 
             return request;
         }
+
+        void CheckForError(IRestResponse response)
+        {
+            if (response.ErrorException != null)
+            {
+                throw response.ErrorException;
+            }
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new Exception("No API endpoint found at that url");
+            }
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new Exception(response.StatusDescription);
+            }
+        }
+
     }
 }

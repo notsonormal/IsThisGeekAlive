@@ -11,15 +11,13 @@ using IsThisGeekAlive.Models.Api;
 namespace IsThisGeekAlive.Controllers
 {
     [Produces("application/json")]
-    [Route("Api/Geeks")]
+    [Route("api/geeks")]
     public class GeeksApiController : Controller
     {
         readonly ILogger _logger;
         readonly IGeekService _geekService;
 
-        public GeeksApiController(
-            ILoggerFactory loggerFactory,
-            IGeekService geekService)
+        public GeeksApiController(ILoggerFactory loggerFactory, IGeekService geekService)
         {
             _logger = loggerFactory.CreateLogger<GeeksApiController>();
             _geekService = geekService;
@@ -28,15 +26,16 @@ namespace IsThisGeekAlive.Controllers
         protected ILogger Log { get { return _logger; } }
 
         [HttpPost]
-        public PingResult Ping([FromBody]Ping request)
+        [Route("login")]
+        public GeekLoginResult Login([FromBody]GeekLogin request)
         {
             if (Log.IsEnabled(LogLevel.Debug))
                 Log.LogDebug("POST: /Api/Geeks/Ping");
 
-            _geekService.PingGeek(request.Username, request.NotAliveWarningWindow,
+            _geekService.Login(request.Username, request.NotAliveWarningWindow,
                 request.NotAliveDangerWindow, request.LocalTime);
 
-            return new PingResult()
+            return new GeekLoginResult()
             {
 
             };

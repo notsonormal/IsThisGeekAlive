@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace IsThisGeekAlive.Models.Api
 {
-    public class Ping
+    public class GeekLogin
     {
         public string Username { get; set; }        
         public int NotAliveWarningWindow { get; set; }

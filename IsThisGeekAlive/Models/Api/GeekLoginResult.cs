@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace IsThisGeekAlive.Models.Api
 {
-    public class PingResult
+    public class GeekLoginResult
     {
     }
 }

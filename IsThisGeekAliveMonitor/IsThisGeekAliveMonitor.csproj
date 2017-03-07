@@ -88,7 +88,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\Ping.cs" />
+    <Compile Include="Models\GeekLogin.cs" />
+    <Compile Include="Models\GeekLoginResult.cs" />
     <Compile Include="MvvmLightViewService\CloseViewMessage.cs" />
     <Compile Include="Services\GeekPingService.cs" />
     <Compile Include="Services\PingFailedMessage.cs" />
@@ -145,6 +146,10 @@
   <ItemGroup />
   <ItemGroup>
     <Resource Include="Dead.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="InnoSetup\NetFrameworkInstaller_4.5.2.exe" />
+    <Content Include="InnoSetup\Setup.iss" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

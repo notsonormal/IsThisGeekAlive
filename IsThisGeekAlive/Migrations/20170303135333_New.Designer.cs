@@ -8,9 +8,10 @@ using IsThisGeekAlive.Data;
 namespace IsThisGeekAlive.Migrations
 {
     [DbContext(typeof(GeekDbContext))]
-    partial class GeekDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170303135333_New")]
+    partial class New
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -21,9 +22,9 @@ namespace IsThisGeekAlive.Migrations
                     b.Property<int>("GeekId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("LastActivityLocalTime");
+                    b.Property<DateTimeOffset>("LastPingLocalTime");
 
-                    b.Property<DateTimeOffset>("LastActivityServerTime");
+                    b.Property<DateTimeOffset>("LastPingServerTime");
 
                     b.Property<int>("NotAliveDangerWindow");
 

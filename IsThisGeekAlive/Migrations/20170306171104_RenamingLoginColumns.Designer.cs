@@ -8,9 +8,10 @@ using IsThisGeekAlive.Data;
 namespace IsThisGeekAlive.Migrations
 {
     [DbContext(typeof(GeekDbContext))]
-    partial class GeekDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170306171104_RenamingLoginColumns")]
+    partial class RenamingLoginColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")

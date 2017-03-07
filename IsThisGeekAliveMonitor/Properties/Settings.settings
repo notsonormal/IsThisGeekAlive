@@ -8,14 +8,14 @@
     <Setting Name="GeekUsername" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="PingInterval" Type="System.Int32" Scope="User">
+    <Setting Name="LoginInterval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="NotAliveWarningWindow" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">24</Value>
+      <Value Profile="(Default)">36</Value>
     </Setting>
     <Setting Name="NotAliveDangerWindow" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">48</Value>
+      <Value Profile="(Default)">72</Value>
     </Setting>
   </Settings>
 </SettingsFile>

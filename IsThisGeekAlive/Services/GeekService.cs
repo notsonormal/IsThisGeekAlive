@@ -16,7 +16,7 @@ namespace IsThisGeekAlive.Services
             _geekContext = geekContext;
         }
 
-        public Geek PingGeek(string username, int notAliveWarningWindow, int notAliveDangerWindow, DateTimeOffset localTime)
+        public Geek Login(string username, int notAliveWarningWindow, int notAliveDangerWindow, DateTimeOffset localTime)
         {
             username = username?.Trim();
             string usernameLower = username?.ToLower();
@@ -35,8 +35,8 @@ namespace IsThisGeekAlive.Services
 
             geek.NotAliveWarningWindow = notAliveWarningWindow;
             geek.NotAliveDangerWindow = notAliveDangerWindow;
-            geek.LastPingLocalTime = localTime;
-            geek.LastPingServerTime = DateTimeOffset.Now;
+            geek.LastActivityLocalTime = localTime;
+            geek.LastActivityServerTime = DateTimeOffset.Now;
 
             _geekContext.SaveChanges();
 

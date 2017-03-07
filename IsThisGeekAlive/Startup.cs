@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using IsThisGeekAlive.Data;
 using IsThisGeekAlive.Models;
 using IsThisGeekAlive.Services;
+using IsThisGeekAlive.Utils;
 
 namespace IsThisGeekAlive
 {
@@ -40,6 +41,8 @@ namespace IsThisGeekAlive
             // Add framework services.
             services.AddDbContext<GeekDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddMvc();
 

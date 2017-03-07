@@ -34,8 +34,8 @@ namespace IsThisGeekAlive.Data
             modelBuilder.Entity<Geek>().Property(x => x.UsernameLower).IsRequired().HasMaxLength(500);
             modelBuilder.Entity<Geek>().Property(x => x.NotAliveWarningWindow).IsRequired();
             modelBuilder.Entity<Geek>().Property(x => x.NotAliveDangerWindow).IsRequired();
-            modelBuilder.Entity<Geek>().Property(x => x.LastPingLocalTime).IsRequired();
-            modelBuilder.Entity<Geek>().Property(x => x.LastPingServerTime).IsRequired();
+            modelBuilder.Entity<Geek>().Property(x => x.LastActivityLocalTime).IsRequired();
+            modelBuilder.Entity<Geek>().Property(x => x.LastActivityServerTime).IsRequired();
         }
     }
 }

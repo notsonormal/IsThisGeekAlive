@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2></h2>
+<h2>Is This Geek Alive?</h2>
 
 <div class="row">    
     <form asp-controller="Geeks" asp-action="Search" method="post" class="form-inline">
@@ -21,52 +21,101 @@
 </div>
 
 <div class="row">
-    <hr />
-</div>
-
-@if (Model.Geek.DoesGeekExist)
-{
-    <div class="row">
-        <p>@Model.Geek.Username</p>
+    @if (Model.Geek.DoesGeekExist)
+    {
+        <br/>
 
         @if (Model.Geek.HasHitDangerThreshold())
         {
             <div class="text-danger">
-                The geek has not logged onto his computer in the last @Model.Geek.LastPingDaysAndHoursAgo()).
+                <b>@Model.Geek.Username</b> has not logged onto his computer since <b>@Model.Geek.LastPingDaysAndHoursAgo())</b>
+                This is the configured <i>danger</i> threshold. You should probably be worried.
             </div>
         }
         else if (Model.Geek.HasHitWarningThreshold())
         {
             <div class="text-warning">
-                The geek has not logged onto his computer in the last @Model.Geek.LastPingDaysAndHoursAgo()). 
+                <b>@Model.Geek.Username</b> has not logged onto his computer since <b>@Model.Geek.LastPingDaysAndHoursAgo())</b>
+                This is the configured <i>concern</i> threshold.
             </div>
         }
         else
         {
-            <div>The geek has logged onto his computer within the last @Model.Geek.NotAliveWarningWindow hours.</div>
-        }
-
-        @if (Model.Geek.HasHitDangerThreshold() || Model.Geek.HasHitWarningThreshold())
-        {
             <div>
-                The last time the user logged in was @Model.Geek.LastPingLocalTime based on the geek's timezone. 
-                Or @Model.Geek.LastPingServerTime based on this website's timezome.
+                Don't worry, <b>@Model.Geek.Username</b> has logged onto his computer within the last <b>@Model.Geek.NotAliveWarningWindow</b> hours.
             </div>
         }
-    </div>
-}
 
-<div class="row">
-    <hr />    
+        @if (Model.Geek.ShowActivityDates())
+        {
+            <br />
+
+            <p>
+                The last time <b>@Model.Geek.Username</b> was logged in was <b>@Html.DisplayFor(m => m.Geek.LastActivityLocalTime)</b> based on the geek's timezone (depending on the his computer clock).
+            </p>
+
+            <p>
+                Or <b>@Html.DisplayFor(m => m.Geek.LastActivityServerTime)</b> based on this website's timezome.
+            </p>
+
+            <p>
+                The value in backets indicates the offset from <a href="https://www.timeanddate.com/time/aboututc.html">UTC time</a>
+                e.g. <a href="https://www.timeanddate.com/worldclock/australia/brisbane">Brisbane</a> is UTC +10:00 so 10am in UTC is 8pm in Brisbane.
+            </p>
+        }
+    }
 </div>
 
+
 <div class="row">
+    <hr />
+
+    <br />
+
+    <h3>
+        How does this work?
+    </h3>
+
     <p>
-        Source code and more information can be found...
+        The geek installs a monitor application on their PC. The application periodically tells this website that the geek is logged in.
+        When a person using this website checks for the geek, it checks the last activity time of the geek and then calculates whether
+        the geek activity is in the "recently", "warning" or "danger" period.
     </p>
+
+    <p>
+        The geek sets the intervals by themselves but by default...
+    </p>
+
+    <ul>
+        <li>The "recently" period is less than 36 hours</li>
+        <li>The "concern" period is between 36 hours and 72 hours</li>
+        <li>The "danger" period is after 72 hours</li>
+    </ul>
+
+    <p>
+        For privacy reasons, as long as the user has logged into his computer "recently", their last activity time is not shown.
+    </p>
+
+    <p>
+        <b>IMPORTANT NOTE</b>
+    </p>
+
+    <p>
+        The monitor application only works properly when geek is...
+    </p>
+
+    <ul>
+        <li>(a) logged into his computer</li>
+        <li>(b) running the monitor application</li>
+        <il>(c) has internet access.</il>
+    </ul>
+
+    <p>
+        So no activity does not necessarily mean that anything is actually wrong with the person themselves, despite the exaggerated name of the website.
+    </p>
+
+    <hr /> 
 </div>
-
-
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using IsThisGeekAlive.Models;
 using IsThisGeekAlive.Services;
 using IsThisGeekAlive.ViewModels;
+using IsThisGeekAlive.Utils;
+using Microsoft.Extensions.Options;
 
 namespace IsThisGeekAlive.Controllers
 {
@@ -18,14 +20,17 @@ namespace IsThisGeekAlive.Controllers
     {
         readonly ILogger _logger;
         readonly IGeekService _geekService;
+        readonly AppSettings _appSettings;
 
         public GeeksController(
             ILoggerFactory loggerFactory,
+            IOptions<AppSettings> appSettings,
             IGeekService geekService)
         {
             _logger = loggerFactory.CreateLogger<GeeksController>();
             _geekService = geekService;
-        }        
+            _appSettings = appSettings.Value;
+        }       
 
         protected ILogger Log { get { return _logger; } }
         
@@ -65,7 +70,7 @@ namespace IsThisGeekAlive.Controllers
 
         GeekViewModel GetGeek(string username)
         {
-            GeekViewModel geekViewModel = new GeekViewModel();
+            GeekViewModel geekViewModel = new GeekViewModel();            
 
             if (username != null)
             {
@@ -74,8 +79,11 @@ namespace IsThisGeekAlive.Controllers
                 if (geek != null)
                 {
                     geekViewModel = new GeekViewModel(geek);
+                    geekViewModel.DoesGeekExist = true;
                 }
             }
+
+            geekViewModel.AlwaysShowPingTimes = _appSettings.AlwaysShowPingTimes;
 
             return geekViewModel;
         }

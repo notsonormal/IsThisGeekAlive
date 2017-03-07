@@ -50,18 +50,18 @@ namespace IsThisGeekAliveMonitor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int PingInterval {
+        public int LoginInterval {
             get {
-                return ((int)(this["PingInterval"]));
+                return ((int)(this["LoginInterval"]));
             }
             set {
-                this["PingInterval"] = value;
+                this["LoginInterval"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("24")]
+        [global::System.Configuration.DefaultSettingValueAttribute("36")]
         public int NotAliveWarningWindow {
             get {
                 return ((int)(this["NotAliveWarningWindow"]));
@@ -73,7 +73,7 @@ namespace IsThisGeekAliveMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("48")]
+        [global::System.Configuration.DefaultSettingValueAttribute("72")]
         public int NotAliveDangerWindow {
             get {
                 return ((int)(this["NotAliveDangerWindow"]));

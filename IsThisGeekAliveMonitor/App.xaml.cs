@@ -10,9 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace IsThisGeekAliveMonitor
 {
@@ -29,6 +31,8 @@ namespace IsThisGeekAliveMonitor
         {
             InitializeComponent();
             base.OnStartup(e);
+
+            Application.Current.DispatcherUnhandledException += OnUnhandledException;
 
             SetupMvvmLightViewService();
             SetupNotifyIcon();
@@ -58,6 +62,18 @@ namespace IsThisGeekAliveMonitor
 
                 _notifyIcon.ShowBalloonTip(ProjectUtils.GetProjectName(), m.ErrorMessage, BalloonIcon.Error);
             });
+        }
+
+        void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            Debug.WriteLine(string.Format("Unhandled exception: {0}", e.Exception.ToString()));
+
+            e.Dispatcher.Invoke(() =>
+            {
+                _notifyIcon.ShowBalloonTip(ProjectUtils.GetProjectName(), e.Exception.Message, BalloonIcon.Error);
+            });
+
+            e.Handled = true;
         }
     }
 }

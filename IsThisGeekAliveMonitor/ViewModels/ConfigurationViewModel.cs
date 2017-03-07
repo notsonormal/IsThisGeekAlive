@@ -26,6 +26,9 @@ namespace IsThisGeekAliveMonitor.ViewModels
             }
             set
             {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("API Url is required");
+
                 IsThisGeekAliveMonitor.Properties.Settings.Default.IsThisGeekAliveApiUrl = value;
             }
         }
@@ -38,19 +41,25 @@ namespace IsThisGeekAliveMonitor.ViewModels
             }
             set
             {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Geek username is required");
+
                 IsThisGeekAliveMonitor.Properties.Settings.Default.GeekUsername = value;
             }
         }
 
-        public int PingInterval
+        public int LoginInterval
         {
             get
             {
-                return IsThisGeekAliveMonitor.Properties.Settings.Default.PingInterval;
+                return IsThisGeekAliveMonitor.Properties.Settings.Default.LoginInterval;
             }
             set
             {
-                IsThisGeekAliveMonitor.Properties.Settings.Default.PingInterval = value;
+                if (value <= 1 || value > 60)
+                    throw new ArgumentException("Ping interval must be between 1 and 60 minutes");
+
+                IsThisGeekAliveMonitor.Properties.Settings.Default.LoginInterval = value;
             }
         }
 
@@ -62,6 +71,9 @@ namespace IsThisGeekAliveMonitor.ViewModels
             }
             set
             {
+                if (value <= 12 || value > 60)
+                    throw new ArgumentException("The not alive warning window must be at least 12 hours");
+
                 IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveWarningWindow = value;
             }
         }
@@ -74,6 +86,12 @@ namespace IsThisGeekAliveMonitor.ViewModels
             }
             set
             {
+                if (value <= 12 || value > 60)
+                    throw new ArgumentException("The not alive danger window must be at least 12 hours");
+
+                if (value < NotAliveWarningWindow)
+                    throw new ArgumentException("The not alive danger must be equal to or greater than the warning window");
+
                 IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveDangerWindow = value;
             }
         }

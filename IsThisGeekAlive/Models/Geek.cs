@@ -12,7 +12,7 @@ namespace IsThisGeekAlive.Models
         public string UsernameLower { get; set; }
         public int NotAliveWarningWindow { get; set; }
         public int NotAliveDangerWindow { get; set; }
-        public DateTimeOffset LastPingLocalTime { get; set; }
-        public DateTimeOffset LastPingServerTime { get; set; }
+        public DateTimeOffset LastActivityLocalTime { get; set; }
+        public DateTimeOffset LastActivityServerTime { get; set; }
     }
 }

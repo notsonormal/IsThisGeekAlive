@@ -22,10 +22,8 @@ namespace IsThisGeekAlive.ViewModels
             NotAliveWarningWindow = geek.NotAliveWarningWindow;
             NotAliveDangerWindow = geek.NotAliveDangerWindow;
 
-            LastPingLocalTime = geek.LastPingLocalTime;
-            LastPingServerTime = geek.LastPingServerTime;
-
-            DoesGeekExist = true;
+            LastActivityLocalTime = geek.LastActivityLocalTime;
+            LastActivityServerTime = geek.LastActivityServerTime;
         }
 
         public int GeekId { get; set; }
@@ -34,36 +32,52 @@ namespace IsThisGeekAlive.ViewModels
         public int NotAliveWarningWindow { get; set; }
         public int NotAliveDangerWindow { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:f}")]
-        public DateTimeOffset LastPingLocalTime { get; set; }
+        [DisplayFormat(DataFormatString = "{0:f} ({0:zzz})", ApplyFormatInEditMode = true)]
+        public DateTimeOffset LastActivityLocalTime { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:f}")]
-        public DateTimeOffset LastPingServerTime { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:f}")]
+        [DisplayFormat(DataFormatString = "{0:f} ({0:zzz})", ApplyFormatInEditMode = true)]
+        public DateTimeOffset LastActivityServerTime { get; set; }
+        
         public DateTimeOffset LastPingServerTimeInUtc
         {
-            get { return LastPingServerTime.ToUniversalTime(); }
+            get { return LastActivityServerTime.ToUniversalTime(); }
         }
 
         public bool DoesGeekExist { get; set; }
+        public bool AlwaysShowPingTimes { get; set; }
 
         public bool HasHitDangerThreshold()
-        {
-            TimeSpan since = DateTime.UtcNow - LastPingServerTimeInUtc;
+        {            
+            TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time"));
+
+            TimeSpan since = GetTimeSince();
             return since.TotalHours > NotAliveDangerWindow;
         }
 
         public bool HasHitWarningThreshold()
         {
-            TimeSpan since = DateTime.UtcNow - LastPingServerTimeInUtc;
+            TimeSpan since = GetTimeSince();
             return since.TotalHours > NotAliveWarningWindow;
         }
 
+        /// <summary>
+        /// e.g. 1 days and 3 hours ago
+        /// </summary>
+        /// <returns></returns>
         public string LastPingDaysAndHoursAgo()
         {
-            TimeSpan since = DateTime.UtcNow - LastPingServerTimeInUtc;
+            TimeSpan since = GetTimeSince();
             return string.Format("{0} days and {1} hours ago", since.Days, since.Hours);
+        }
+
+        public bool ShowActivityDates()
+        {
+            return AlwaysShowPingTimes || HasHitDangerThreshold() || HasHitWarningThreshold();
+        }
+
+        TimeSpan GetTimeSince()
+        {
+            return DateTime.UtcNow - LastPingServerTimeInUtc;
         }
     }
 }
