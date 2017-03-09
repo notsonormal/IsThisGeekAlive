@@ -7,7 +7,7 @@
 
 <h2>Is This Geek Alive?</h2>
 
-<div class="row">    
+<div class="">    
     <form asp-controller="Geeks" asp-action="Search" method="post" class="form-inline">
         <div class="form-group">
             <label asp-for="Geek.Username" class="control-label"></label>
@@ -20,7 +20,7 @@
     </form>
 </div>
 
-<div class="row">
+<div class="">
     @if (Model.Geek.DoesGeekExist)
     {
         <br/>
@@ -55,7 +55,7 @@
             </p>
 
             <p>
-                Or <b>@Html.DisplayFor(m => m.Geek.LastActivityServerTime)</b> based on this website's timezome.
+                Or <b>@Html.DisplayFor(m => m.Geek.LastActivityServerTime)</b> based on this website's timezone.
             </p>
 
             <p>
@@ -67,7 +67,7 @@
 </div>
 
 
-<div class="row">
+<div class="">
     <hr />
 
     <br />
@@ -88,8 +88,8 @@
 
     <ul>
         <li>The "recently" period is less than 36 hours</li>
-        <li>The "concern" period is between 36 hours and 72 hours</li>
-        <li>The "danger" period is after 72 hours</li>
+        <li>The "concern" period is between 36 hours and 96 hours</li>
+        <li>The "danger" period is after 96 hours</li>
     </ul>
 
     <p>
@@ -111,10 +111,8 @@
     </ul>
 
     <p>
-        So no activity does not necessarily mean that anything is actually wrong with the person themselves, despite the exaggerated name of the website.
+        So no activity does not necessarily mean that anything is actually wrong with the person, despite the exaggerated name of the website.
     </p>
-
-    <hr /> 
 </div>
 
 @section Scripts {

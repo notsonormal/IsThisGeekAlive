@@ -73,7 +73,7 @@ namespace IsThisGeekAliveMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("72")]
+        [global::System.Configuration.DefaultSettingValueAttribute("96")]
         public int NotAliveDangerWindow {
             get {
                 return ((int)(this["NotAliveDangerWindow"]));

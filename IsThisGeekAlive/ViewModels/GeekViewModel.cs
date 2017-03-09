@@ -61,13 +61,13 @@ namespace IsThisGeekAlive.ViewModels
         }
 
         /// <summary>
-        /// e.g. 1 days and 3 hours ago
+        /// e.g. 1 day(s) and 3 hour(s) ago
         /// </summary>
         /// <returns></returns>
         public string LastPingDaysAndHoursAgo()
         {
             TimeSpan since = GetTimeSince();
-            return string.Format("{0} days and {1} hours ago", since.Days, since.Hours);
+            return string.Format("{0} day(s) and {1} hour(s) ago", since.Days, since.Hours);
         }
 
         public bool ShowActivityDates()

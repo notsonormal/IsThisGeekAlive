@@ -15,7 +15,7 @@
       <Value Profile="(Default)">36</Value>
     </Setting>
     <Setting Name="NotAliveDangerWindow" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">72</Value>
+      <Value Profile="(Default)">96</Value>
     </Setting>
   </Settings>
 </SettingsFile>

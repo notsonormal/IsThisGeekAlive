@@ -13,11 +13,13 @@ namespace IsThisGeekAlive.Services
 
         public GeekService(GeekDbContext geekContext)
         {
-            _geekContext = geekContext;
+            _geekContext = geekContext;            
         }
 
         public Geek Login(string username, int notAliveWarningWindow, int notAliveDangerWindow, DateTimeOffset localTime)
         {
+            _geekContext.Database.EnsureCreated();
+
             username = username?.Trim();
             string usernameLower = username?.ToLower();
 
@@ -45,6 +47,8 @@ namespace IsThisGeekAlive.Services
 
         public Geek GetGeekByUsername(string username)
         {
+            _geekContext.Database.EnsureCreated();
+
             username = username?.Trim();
             string usernameLower = username?.ToLower();
 
