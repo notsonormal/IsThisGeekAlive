@@ -14,8 +14,11 @@ namespace IsThisGeekAlive.Migrations
                 {
                     GeekId = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGeneratedOnAdd", true),
-                    LastActivityLocalTime = table.Column<DateTimeOffset>(nullable: false),
-                    LastActivityServerTime = table.Column<DateTimeOffset>(nullable: false),
+                    LastActivityLocalTime = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    LastActivityLocalTimeUtcOffset = table.Column<short>(nullable: false),
+                    LastActivityServerTime = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    LastActivityServerTimeUtcOffset = table.Column<short>(nullable: false),
+                    LoginCode = table.Column<string>(maxLength: 100, nullable: false),
                     NotAliveDangerWindow = table.Column<int>(nullable: false),
                     NotAliveWarningWindow = table.Column<int>(nullable: false),
                     Username = table.Column<string>(maxLength: 500, nullable: false),

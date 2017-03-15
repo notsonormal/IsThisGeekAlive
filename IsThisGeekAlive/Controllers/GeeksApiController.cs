@@ -32,7 +32,7 @@ namespace IsThisGeekAlive.Controllers
             if (Log.IsEnabled(LogLevel.Debug))
                 Log.LogDebug("POST: /Api/Geeks/Ping");
 
-            _geekService.Login(request.Username, request.NotAliveWarningWindow,
+            _geekService.Login(request.Username, request.LoginCode, request.NotAliveWarningWindow,
                 request.NotAliveDangerWindow, request.LocalTime);
 
             return new GeekLoginResult()

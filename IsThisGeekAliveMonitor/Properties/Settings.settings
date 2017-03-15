@@ -17,5 +17,8 @@
     <Setting Name="NotAliveDangerWindow" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">96</Value>
     </Setting>
+    <Setting Name="GeekLoginCode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123456</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

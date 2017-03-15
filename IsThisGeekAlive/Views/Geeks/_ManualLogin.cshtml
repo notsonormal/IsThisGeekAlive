@@ -1,0 +1,41 @@
+@model IsThisGeekAlive.ViewModels.GeeksIndexViewModel
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>
+            If the geek doesn't have access to their PC they can manually login here.
+        </p>
+
+        <form asp-controller="Geeks" asp-action="ManualLogin" method="post" class="form">
+            <div class="form-group">
+                <label asp-for="ManualLoginUsername" class="control-label"></label>
+                <input asp-for="ManualLoginUsername" class="form-control" />
+                <span asp-validation-for="ManualLoginUsername" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ManualLoginCode" class="control-label"></label>
+                <input asp-for="ManualLoginCode" class="form-control" />
+                <span asp-validation-for="ManualLoginCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CreateNewGeekIfMissing" class="control-label"></label>
+                <input asp-for="CreateNewGeekIfMissing" class="checkbox" />
+                <span asp-validation-for="CreateNewGeekIfMissing" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Manual Login</button>
+            </div>
+
+            @Html.HiddenFor(m => m.SelectManualLogin)
+            @Html.HiddenFor(m => m.ClientUtcOffset)
+        </form>
+
+        <p>
+            The login code is to ensure that another person cannot log in as them.
+        </p>
+    </div>
+</div>        
+

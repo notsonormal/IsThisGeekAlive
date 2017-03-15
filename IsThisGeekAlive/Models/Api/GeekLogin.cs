@@ -7,7 +7,8 @@ namespace IsThisGeekAlive.Models.Api
 {
     public class GeekLogin
     {
-        public string Username { get; set; }        
+        public string Username { get; set; }  
+        public string LoginCode { get; set; }      
         public int NotAliveWarningWindow { get; set; }
         public int NotAliveDangerWindow { get; set; }
         public DateTimeOffset LocalTime { get; set; }

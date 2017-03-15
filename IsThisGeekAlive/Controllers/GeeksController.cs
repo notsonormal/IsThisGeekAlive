@@ -35,7 +35,8 @@ namespace IsThisGeekAlive.Controllers
         protected ILogger Log { get { return _logger; } }
         
         [HttpGet]
-        public IActionResult Index(string username = null)
+        public IActionResult Index(string username = null, string manualLoginUsername = null, 
+            string manualLoginCode = null, string message = null)
         {
             if (Log.IsEnabled(LogLevel.Debug))
                 Log.LogDebug("GET: /Geeks/Index");
@@ -44,12 +45,15 @@ namespace IsThisGeekAlive.Controllers
 
             if (!string.IsNullOrWhiteSpace(username) && geekViewModel.GeekId == 0)
             {
-                ModelState.AddModelError("Username", "No geek has been found with that username");
+                ModelState.AddModelError("Geek.Username", "No geek has been found with that username");
             }
 
             return View(new GeeksIndexViewModel()
             {
-                Geek = geekViewModel
+                Geek = geekViewModel,
+                ManualLoginUsername = manualLoginUsername,
+                ManualLoginCode = manualLoginCode,  
+                Message = message,
             });
         }
 
@@ -66,6 +70,71 @@ namespace IsThisGeekAlive.Controllers
             }
 
             return RedirectToAction("Index", new { username = viewModel.Geek.Username });
+        }
+
+        [HttpPost]
+        public IActionResult ManualLogin(GeeksIndexViewModel viewModel)
+        {
+            if (Log.IsEnabled(LogLevel.Debug))
+                Log.LogDebug("POST: /Geeks/ManualLogin");
+
+            bool isValid = ValidateManualLogin(viewModel);
+            if (!isValid)
+            {
+                return View("Index", viewModel);
+            }
+
+            string successMessage =
+                $"Login was successful with username {viewModel.ManualLoginUsername} " +
+                $"and login code {viewModel.ManualLoginCode}";
+
+            var geek = GetGeek(viewModel.ManualLoginUsername);
+            var localTime = new DateTimeOffset(DateTime.UtcNow, TimeSpan.FromMinutes(viewModel.ClientUtcOffset));
+
+            if (geek.DoesGeekExist)
+            {
+                if (geek.LoginCode != viewModel.ManualLoginCode)
+                {
+                    ModelState.AddModelError("Username", "The login code must match the previously set login code");
+                    return View("Index", viewModel);
+                }
+
+                _geekService.Login(geek.Username, geek.LoginCode, geek.NotAliveWarningWindow,
+                    geek.NotAliveDangerWindow, localTime);
+            }
+            else
+            {
+                if (!viewModel.CreateNewGeekIfMissing)
+                {
+                    ModelState.AddModelError("ManualLoginUsername", "No geek has been found with that username");
+                    return View("Index", viewModel);
+                }
+
+                _geekService.Login(viewModel.ManualLoginUsername, viewModel.ManualLoginCode,
+                    Geek.DefaultNotAliveWarningWindow, Geek.DefaultNotAliveDangerWindow, localTime);
+            }
+
+            return RedirectToAction("Index", new
+            {
+                message = successMessage,
+            });
+        }
+
+        bool ValidateManualLogin(GeeksIndexViewModel viewModel)
+        {
+            if (string.IsNullOrWhiteSpace(viewModel.ManualLoginUsername))
+            {
+                ModelState.AddModelError("ManualLoginUsername", "The manual login username field is required");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(viewModel.ManualLoginCode))
+            {
+                ModelState.AddModelError("ManualLoginCode", "The manual login code field is required");
+                return false;
+            }
+
+            return true;
         }
 
         GeekViewModel GetGeek(string username)

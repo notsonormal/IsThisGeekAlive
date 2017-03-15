@@ -64,12 +64,13 @@ namespace IsThisGeekAliveMonitor.Services
 
             string apiUrl = Properties.Settings.Default.IsThisGeekAliveApiUrl;
             string geekUsername = Properties.Settings.Default.GeekUsername;
+            string geekLoginCode = Properties.Settings.Default.GeekLoginCode;
             int notAliveWarningWindow = Properties.Settings.Default.NotAliveWarningWindow;
             int notAliveDangerWindow = Properties.Settings.Default.NotAliveDangerWindow;
 
             if (string.IsNullOrWhiteSpace(apiUrl))
             {
-                Messenger.Default.Send(new PingFailedMessage("API URL has not been set"));
+                Messenger.Default.Send(new PingFailedMessage("The API url has not been set"));
                 return;
             }
 
@@ -79,8 +80,15 @@ namespace IsThisGeekAliveMonitor.Services
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(geekLoginCode))
+            {
+                Messenger.Default.Send(new PingFailedMessage("The geek's login code has not been set"));
+                return;
+            }
+
             RestClient client = new RestClient(apiUrl);
-            RestRequest request = CreatePingRequest(geekUsername, notAliveWarningWindow, notAliveDangerWindow);
+            RestRequest request = CreatePingRequest(geekUsername, geekLoginCode,
+                notAliveWarningWindow, notAliveDangerWindow);
 
             try
             {
@@ -94,7 +102,7 @@ namespace IsThisGeekAliveMonitor.Services
             }
         }
 
-        RestRequest CreatePingRequest(string geekUsername, int notAliveWarningWindow, int notAliveDangerWindow)
+        RestRequest CreatePingRequest(string geekUsername, string loginCode, int notAliveWarningWindow, int notAliveDangerWindow)
         {
             RestRequest request = new RestRequest("geeks/login")
             {
@@ -105,6 +113,7 @@ namespace IsThisGeekAliveMonitor.Services
             request.AddBody(new GeekLogin()
             {
                 Username = geekUsername,
+                LoginCode = loginCode,
                 LocalTime = DateTimeOffset.Now,
                 NotAliveWarningWindow = notAliveWarningWindow,
                 NotAliveDangerWindow = notAliveDangerWindow

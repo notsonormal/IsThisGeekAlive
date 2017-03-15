@@ -9,9 +9,15 @@ namespace IsThisGeekAlive.Data
 {
     public class GeekDbContext : DbContext
     {
+        public GeekDbContext()
+            : base()
+        {
+        }
+
         public GeekDbContext(DbContextOptions<GeekDbContext> options)
             : base(options)
-        { }
+        {
+        }
 
         public DbSet<Geek> Geeks { get; set; }
 
@@ -32,10 +38,13 @@ namespace IsThisGeekAlive.Data
             modelBuilder.Entity<Geek>().Property(x => x.GeekId).ValueGeneratedOnAdd();
             modelBuilder.Entity<Geek>().Property(x => x.Username).IsRequired().HasMaxLength(500);        
             modelBuilder.Entity<Geek>().Property(x => x.UsernameLower).IsRequired().HasMaxLength(500);
+            modelBuilder.Entity<Geek>().Property(x => x.LoginCode).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<Geek>().Property(x => x.NotAliveWarningWindow).IsRequired();
             modelBuilder.Entity<Geek>().Property(x => x.NotAliveDangerWindow).IsRequired();
-            modelBuilder.Entity<Geek>().Property(x => x.LastActivityLocalTime).IsRequired();
-            modelBuilder.Entity<Geek>().Property(x => x.LastActivityServerTime).IsRequired();
+            modelBuilder.Entity<Geek>().Property(x => x.LastActivityLocalTime).HasColumnType("TIMESTAMP").IsRequired();
+            modelBuilder.Entity<Geek>().Property(x => x.LastActivityLocalTimeUtcOffset).IsRequired();
+            modelBuilder.Entity<Geek>().Property(x => x.LastActivityServerTime).HasColumnType("TIMESTAMP").IsRequired();
+            modelBuilder.Entity<Geek>().Property(x => x.LastActivityServerTimeUtcOffset).IsRequired();
         }
     }
 }

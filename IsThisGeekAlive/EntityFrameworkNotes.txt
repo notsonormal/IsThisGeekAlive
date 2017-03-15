@@ -1,5 +1,4 @@
 ﻿To add a migration run the following command from the Package Manager Console
-
 Add-Migration [MigrationName]
 
 To create/update the database run the following command from the Package Manager Console 

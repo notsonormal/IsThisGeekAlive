@@ -16,12 +16,13 @@ namespace IsThisGeekAlive.Services
             _geekContext = geekContext;            
         }
 
-        public Geek Login(string username, int notAliveWarningWindow, int notAliveDangerWindow, DateTimeOffset localTime)
+        public Geek Login(string username, string loginCode, int notAliveWarningWindow, int notAliveDangerWindow, DateTimeOffset localTime)
         {
             _geekContext.Database.EnsureCreated();
 
             username = username?.Trim();
             string usernameLower = username?.ToLower();
+            DateTimeOffset serverTime = DateTimeOffset.Now;
 
             var geek = _geekContext.Geeks.SingleOrDefault(x => x.UsernameLower == usernameLower);
             if (geek == null)
@@ -35,10 +36,13 @@ namespace IsThisGeekAlive.Services
                 _geekContext.Geeks.Add(geek);
             }
 
+            geek.LoginCode = loginCode;
             geek.NotAliveWarningWindow = notAliveWarningWindow;
             geek.NotAliveDangerWindow = notAliveDangerWindow;
-            geek.LastActivityLocalTime = localTime;
-            geek.LastActivityServerTime = DateTimeOffset.Now;
+            geek.LastActivityLocalTime = localTime.UtcDateTime;
+            geek.LastActivityLocalTimeUtcOffset = (short)localTime.Offset.TotalMinutes;
+            geek.LastActivityServerTime = serverTime.UtcDateTime;
+            geek.LastActivityServerTimeUtcOffset = (short)serverTime.Offset.TotalMinutes;
 
             _geekContext.SaveChanges();
 

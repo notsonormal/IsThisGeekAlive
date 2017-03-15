@@ -44,7 +44,28 @@ namespace IsThisGeekAliveMonitor.ViewModels
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException("Geek username is required");
 
+                if (value.Length < 5)
+                    throw new ArgumentException("Geek username must be at least 5 characters");
+
                 IsThisGeekAliveMonitor.Properties.Settings.Default.GeekUsername = value;
+            }
+        }
+
+        public string GeekLoginCode
+        {
+            get
+            {
+                return IsThisGeekAliveMonitor.Properties.Settings.Default.GeekLoginCode;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Login code is required");
+
+                if (value.Length < 5)
+                    throw new ArgumentException("Login code must be at least 5 characters");
+
+                IsThisGeekAliveMonitor.Properties.Settings.Default.GeekLoginCode = value;
             }
         }
 
@@ -90,7 +111,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
                     throw new ArgumentException("The not alive danger window must be at least 12 hours");
 
                 if (value < NotAliveWarningWindow)
-                    throw new ArgumentException("The not alive danger must be equal to or greater than the warning window");
+                    throw new ArgumentException("The not alive danger window must be equal to or greater than the warning window");
 
                 IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveDangerWindow = value;
             }

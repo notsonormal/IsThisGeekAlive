@@ -82,5 +82,17 @@ namespace IsThisGeekAliveMonitor.Properties {
                 this["NotAliveDangerWindow"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("123456")]
+        public string GeekLoginCode {
+            get {
+                return ((string)(this["GeekLoginCode"]));
+            }
+            set {
+                this["GeekLoginCode"] = value;
+            }
+        }
     }
 }

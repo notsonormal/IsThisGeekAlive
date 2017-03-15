@@ -1,0 +1,56 @@
+@model IsThisGeekAlive.ViewModels.GeeksIndexViewModel
+
+<br />
+
+@if (Model.Geek.HasHitDangerThreshold())
+{
+    <div class="text-danger">
+        <b>@Model.Geek.Username</b> has not logged onto his computer since <b>@Model.Geek.LastPingDaysAndHoursAgo())</b>
+        This is the configured <i>danger</i> threshold. You should probably be worried.
+    </div>
+}
+else if (Model.Geek.HasHitWarningThreshold())
+{
+    <div class="text-warning">
+        <b>@Model.Geek.Username</b> has not logged onto his computer since <b>@Model.Geek.LastPingDaysAndHoursAgo())</b>
+        This is the configured <i>concern</i> threshold.
+    </div>
+}
+else
+{
+    <div>
+        Don't worry, <b>@Model.Geek.Username</b> has logged onto his computer within the last <b>@Model.Geek.NotAliveWarningWindow</b> hours.
+    </div>
+}
+
+@if (Model.Geek.ShowActivityDates())
+{
+    <br />
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p>
+                The last time <b>@Model.Geek.Username</b> logged on was <b>@Html.DisplayFor(m => m.Geek.LastActivityLocalTime)</b> based on the geek's timezone.
+            </p>
+
+            <p>
+                Or <b>@Html.DisplayFor(m => m.Geek.LastActivityServerTime)</b> based on this website's timezone.
+            </p>
+
+            <div class="small">
+                <p>
+                    * <i>The geek's timezone depends on the computer clock so it may not be accurate.</i>
+                </p>
+            </div>
+
+            <div class="small">
+                <p>
+                    ** <i>
+                        The value in backets indicates the timezone hour difference from <a href="https://www.timeanddate.com/time/aboututc.html">UTC time</a>
+                        - e.g. <a href="https://www.timeanddate.com/worldclock/australia/brisbane">Brisbane</a> is UTC +10:00 so 10am in UTC is 8pm in Brisbane.
+                    </i>
+                </p>
+            </div>
+        </div>
+    </div>
+}

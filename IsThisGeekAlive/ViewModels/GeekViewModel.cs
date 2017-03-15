@@ -19,29 +19,32 @@ namespace IsThisGeekAlive.ViewModels
             GeekId = geek.GeekId;
             Username = geek.Username;
             UsernameLower = geek.UsernameLower;
+            LoginCode = geek.LoginCode;
             NotAliveWarningWindow = geek.NotAliveWarningWindow;
             NotAliveDangerWindow = geek.NotAliveDangerWindow;
 
-            LastActivityLocalTime = geek.LastActivityLocalTime;
-            LastActivityServerTime = geek.LastActivityServerTime;
+            LastActivityLocalTime = new DateTimeOffset(
+                geek.LastActivityLocalTime,
+                TimeSpan.FromMinutes(geek.LastActivityLocalTimeUtcOffset));
+
+            LastActivityServerTime = new DateTimeOffset(
+                geek.LastActivityServerTime,
+                TimeSpan.FromMinutes(geek.LastActivityServerTimeUtcOffset));
         }
 
-        public int GeekId { get; set; }
+        public int GeekId { get; set; }    
         public string Username { get; set; }
-        public string UsernameLower { get; set; }
+        public string UsernameLower { get; set; }        
+        public string LoginCode { get; set; }
         public int NotAliveWarningWindow { get; set; }
-        public int NotAliveDangerWindow { get; set; }
+        public int NotAliveDangerWindow { get; set; }        
 
         [DisplayFormat(DataFormatString = "{0:f} ({0:zzz})", ApplyFormatInEditMode = true)]
         public DateTimeOffset LastActivityLocalTime { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:f} ({0:zzz})", ApplyFormatInEditMode = true)]
         public DateTimeOffset LastActivityServerTime { get; set; }
-        
-        public DateTimeOffset LastPingServerTimeInUtc
-        {
-            get { return LastActivityServerTime.ToUniversalTime(); }
-        }
+       
 
         public bool DoesGeekExist { get; set; }
         public bool AlwaysShowPingTimes { get; set; }
@@ -77,7 +80,7 @@ namespace IsThisGeekAlive.ViewModels
 
         TimeSpan GetTimeSince()
         {
-            return DateTime.UtcNow - LastPingServerTimeInUtc;
+            return DateTime.UtcNow - LastActivityServerTime.ToUniversalTime();
         }
     }
 }

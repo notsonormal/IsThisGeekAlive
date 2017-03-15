@@ -38,10 +38,12 @@ namespace IsThisGeekAlive
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-
             // Add framework services.
-            services.AddDbContext<GeekDbContext>(options => options.UseSqlite(connectionString));
+            //services.AddDbContext<GeekDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("SqlLightConnection")));
+
+            services.AddDbContext<GeekDbContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+                mySqlOptions => mySqlOptions.MigrationsHistoryTable("efmigrationtable")));
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 

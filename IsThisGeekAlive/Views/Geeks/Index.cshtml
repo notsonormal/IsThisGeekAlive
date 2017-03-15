@@ -7,112 +7,51 @@
 
 <h2>Is This Geek Alive?</h2>
 
-<div class="">    
-    <form asp-controller="Geeks" asp-action="Search" method="post" class="form-inline">
-        <div class="form-group">
-            <label asp-for="Geek.Username" class="control-label"></label>
-            <input asp-for="Geek.Username" class="form-control" />
+@if (Model.Message != null)
+{
+    <div class="alert alert-info">
+        <p>
+            @Model.Message
+        </p>
+    </div>
+}
 
-            <button type="submit" class="btn btn-primary">Search</button>
+<form asp-controller="Geeks" asp-action="Search" method="post" class="form-inline">
+    <label asp-for="Geek.Username" class="control-label"></label>
+    <input asp-for="Geek.Username" class="form-control" />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
 
-            <div asp-validation-summary="All" class="text-danger"></div>
-        </div>
-    </form>
+<p>
+    <span asp-validation-for="Geek.Username" class="text-danger"></span>
+</p>
+
+
+@if (Model.Geek.DoesGeekExist)
+{
+    @Html.Partial("_GeekDetails")
+}
+
+<hr />
+
+<button id="howDoesThisWorkBtn" class="btn btn-default">How Does This Work?</button>
+<button id="applicationImagesBtn" class="btn btn-default">Images</button>
+<button id="manualLoginBtn" class="btn btn-default">Manual Login</button>
+
+<br />
+
+<br />
+
+<div id="howDoesThisWorkDiv" class="buttonDivs" style="display:none">
+    @Html.Partial("_HowDoesThisWork", Model)
 </div>
 
-<div class="">
-    @if (Model.Geek.DoesGeekExist)
-    {
-        <br/>
-
-        @if (Model.Geek.HasHitDangerThreshold())
-        {
-            <div class="text-danger">
-                <b>@Model.Geek.Username</b> has not logged onto his computer since <b>@Model.Geek.LastPingDaysAndHoursAgo())</b>
-                This is the configured <i>danger</i> threshold. You should probably be worried.
-            </div>
-        }
-        else if (Model.Geek.HasHitWarningThreshold())
-        {
-            <div class="text-warning">
-                <b>@Model.Geek.Username</b> has not logged onto his computer since <b>@Model.Geek.LastPingDaysAndHoursAgo())</b>
-                This is the configured <i>concern</i> threshold.
-            </div>
-        }
-        else
-        {
-            <div>
-                Don't worry, <b>@Model.Geek.Username</b> has logged onto his computer within the last <b>@Model.Geek.NotAliveWarningWindow</b> hours.
-            </div>
-        }
-
-        @if (Model.Geek.ShowActivityDates())
-        {
-            <br />
-
-            <p>
-                The last time <b>@Model.Geek.Username</b> was logged in was <b>@Html.DisplayFor(m => m.Geek.LastActivityLocalTime)</b> based on the geek's timezone (depending on the his computer clock).
-            </p>
-
-            <p>
-                Or <b>@Html.DisplayFor(m => m.Geek.LastActivityServerTime)</b> based on this website's timezone.
-            </p>
-
-            <p>
-                The value in backets indicates the offset from <a href="https://www.timeanddate.com/time/aboututc.html">UTC time</a>
-                e.g. <a href="https://www.timeanddate.com/worldclock/australia/brisbane">Brisbane</a> is UTC +10:00 so 10am in UTC is 8pm in Brisbane.
-            </p>
-        }
-    }
+<div id="applicationImagesDiv" class="buttonDivs" style="display:none">
+    @Html.Partial("_ApplicationImages", Model)
 </div>
 
-
-<div class="">
-    <hr />
-
-    <br />
-
-    <h3>
-        How does this work?
-    </h3>
-
-    <p>
-        The geek installs a monitor application on their PC. The application periodically tells this website that the geek is logged in.
-        When a person using this website checks for the geek, it checks the last activity time of the geek and then calculates whether
-        the geek activity is in the "recently", "warning" or "danger" period.
-    </p>
-
-    <p>
-        The geek sets the intervals by themselves but by default...
-    </p>
-
-    <ul>
-        <li>The "recently" period is less than 36 hours</li>
-        <li>The "concern" period is between 36 hours and 96 hours</li>
-        <li>The "danger" period is after 96 hours</li>
-    </ul>
-
-    <p>
-        For privacy reasons, as long as the user has logged into his computer "recently", their last activity time is not shown.
-    </p>
-
-    <p>
-        <b>IMPORTANT NOTE</b>
-    </p>
-
-    <p>
-        The monitor application only works properly when geek is...
-    </p>
-
-    <ul>
-        <li>(a) logged into his computer</li>
-        <li>(b) running the monitor application</li>
-        <il>(c) has internet access.</il>
-    </ul>
-
-    <p>
-        So no activity does not necessarily mean that anything is actually wrong with the person, despite the exaggerated name of the website.
-    </p>
+<div id="manualLoginDiv" class="buttonDivs" style="display:none">
+    @Html.Partial("_ManualLogin", Model)
 </div>
 
 @section Scripts {

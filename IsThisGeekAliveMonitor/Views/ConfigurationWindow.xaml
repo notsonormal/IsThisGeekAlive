@@ -36,6 +36,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
@@ -49,21 +50,24 @@
         <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Path=IsThisGeekAliveApiUrl, ValidatesOnExceptions=True}"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Geek Username"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Path=GeekUsername, ValidatesOnExceptions=True}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="200" HorizontalAlignment="Left" Text="{Binding Path=GeekUsername, ValidatesOnExceptions=True}"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Login every"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=LoginInterval, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
-        <TextBlock Grid.Row="2" Grid.Column="2" Text="minutes"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Login Code"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Width="100" HorizontalAlignment="Left" Text="{Binding Path=GeekLoginCode, ValidatesOnExceptions=True}"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Not alive warning window"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=NotAliveWarningWindow, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
-        <TextBlock Grid.Row="3" Grid.Column="2" Text="in hours"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Login every"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=LoginInterval, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
+        <TextBlock Grid.Row="3" Grid.Column="2" Text="minutes"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Not alive danger window"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=NotAliveDangerWindow, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Not alive warning window"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=NotAliveWarningWindow, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
         <TextBlock Grid.Row="4" Grid.Column="2" Text="in hours"/>
 
-        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Not alive danger window"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=NotAliveDangerWindow, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
+        <TextBlock Grid.Row="5" Grid.Column="2" Text="in hours"/>
+
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Save" Width="80" Height="30" Command="{Binding SaveCommand}" IsDefault="True"/>
             <Button Content="Cancel" Width="80" Height="30" Command="{Binding CancelCommand}" IsCancel="True"/>
         </StackPanel>

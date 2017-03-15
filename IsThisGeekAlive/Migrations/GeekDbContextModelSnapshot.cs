@@ -13,16 +13,26 @@ namespace IsThisGeekAlive.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
+                .HasAnnotation("ProductVersion", "1.1.1");
 
             modelBuilder.Entity("IsThisGeekAlive.Models.Geek", b =>
                 {
                     b.Property<int>("GeekId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("LastActivityLocalTime");
+                    b.Property<DateTime>("LastActivityLocalTime")
+                        .HasColumnType("TIMESTAMP");
 
-                    b.Property<DateTimeOffset>("LastActivityServerTime");
+                    b.Property<short>("LastActivityLocalTimeUtcOffset");
+
+                    b.Property<DateTime>("LastActivityServerTime")
+                        .HasColumnType("TIMESTAMP");
+
+                    b.Property<short>("LastActivityServerTimeUtcOffset");
+
+                    b.Property<string>("LoginCode")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 100);
 
                     b.Property<int>("NotAliveDangerWindow");
 
