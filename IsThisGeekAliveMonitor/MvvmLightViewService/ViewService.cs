@@ -36,7 +36,7 @@ namespace IsThisGeekAliveMonitor.MvvmLightViewService
             Window window = CreateWindow(viewModel);
 
             // Open the window.
-            window.Show();
+            window.Dispatcher.Invoke(window.Show);
         }
 
         public bool? OpenDialog(ViewModelBase viewModel)
@@ -45,7 +45,7 @@ namespace IsThisGeekAliveMonitor.MvvmLightViewService
             Window window = CreateWindow(viewModel);
 
             // Open the window and return the result.
-            return window.ShowDialog();
+            return window.Dispatcher.Invoke(window.ShowDialog);          
         }
 
         Window CreateWindow(ViewModelBase viewModel)

@@ -13,6 +13,7 @@ using IsThisGeekAlive.Data;
 using IsThisGeekAlive.Models;
 using IsThisGeekAlive.Services;
 using IsThisGeekAlive.Utils;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 
 namespace IsThisGeekAlive
 {
@@ -27,6 +28,7 @@ namespace IsThisGeekAlive
 
             if (env.IsDevelopment())
             {
+                builder.AddApplicationInsightsSettings(developerMode: true);
             }
 
             builder.AddEnvironmentVariables();
@@ -39,11 +41,13 @@ namespace IsThisGeekAlive
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            //services.AddDbContext<GeekDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("SqlLightConnection")));
+            services.AddApplicationInsightsTelemetry();
 
-            services.AddDbContext<GeekDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
-                mySqlOptions => mySqlOptions.MigrationsHistoryTable("efmigrationtable")));
+            services.AddDbContext<GeekDbContext>(options => options.UseMySql(
+                Configuration.GetConnectionString("MySqlConnection"),
+                mySqlOptions => mySqlOptions
+                    .MigrationsHistoryTable("efmigrationtable")
+                    .CommandTimeout(180)));
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 

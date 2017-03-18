@@ -14,6 +14,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
+    <ApplicationInsightsResourceId>/subscriptions/9a8b4b11-8797-4e9d-9b80-884f51d412ce/resourcegroups/IsThisGeekAlive-Group/providers/microsoft.insights/components/IsThisGeekAlive</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/9a8b4b11-8797-4e9d-9b80-884f51d412ce/resourcegroups/IsThisGeekAlive-Group/providers/microsoft.insights/components/IsThisGeekAlive</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
   <ItemGroup>
     <DnxInvisibleContent Include="bower.json" />

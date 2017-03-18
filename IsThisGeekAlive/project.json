@@ -45,7 +45,8 @@
       "type": "build"
     },
     "Pomelo.EntityFrameworkCore.MySql": "1.1.0",
-    "Microsoft.EntityFrameworkCore.Sqlite": "1.1.1"
+    "Microsoft.EntityFrameworkCore.Sqlite": "1.1.1",
+    "Microsoft.ApplicationInsights.AspNetCore": "2.0.0"
   },
 
   "tools": {

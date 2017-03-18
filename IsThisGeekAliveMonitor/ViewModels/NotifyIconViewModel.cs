@@ -20,34 +20,25 @@ namespace IsThisGeekAliveMonitor.ViewModels
             _pingService.Start();
         }
 
-        public ICommand ShowWindowCommand
+        public void ShowWindow()
         {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    bool? result = ServiceManager.OpenDialog(new ConfigurationViewModel());
+            bool? result = ServiceManager.OpenDialog(new ConfigurationViewModel());
 
-                    if (result == true)
-                    {
-                        // Restart to immediately send a ping request with the new settings
-                        _pingService.Stop();
-                        _pingService.Start();
-                    }
-                });
+            if (result == true)
+            {
+                // Restart to immediately send a ping request with the new settings
+                _pingService.Stop();
+                _pingService.Start();
             }
         }
 
-        public ICommand CloseApplicationCommand
+        public void CloseWindow()
         {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    _pingService.Stop();
-                    Application.Current.Shutdown();                    
-                });
-            }
+            _pingService.Stop();
+            Application.Current.Shutdown();
         }
+
+        public ICommand ShowWindowCommand { get { return new RelayCommand(ShowWindow); } }
+        public ICommand CloseApplicationCommand { get { return new RelayCommand(CloseWindow); } }
     }
 }

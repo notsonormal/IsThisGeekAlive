@@ -17,7 +17,7 @@ namespace IsThisGeekAlive.ViewModels
 
         [Display(Name = "Username")]
         [MinLength(5, ErrorMessage = "The username is too short, it must be 5 characters or more")]
-        [MaxLength(500, ErrorMessage = "The username is too long, it must be 500 characters or less")])]
+        [MaxLength(500, ErrorMessage = "The username is too long, it must be 500 characters or less")]
         public string ManualLoginUsername { get; set; }
 
         [Display(Name = "Login code")]

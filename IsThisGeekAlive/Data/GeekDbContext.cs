@@ -33,7 +33,7 @@ namespace IsThisGeekAlive.Data
         void OnModelCreatingGeek(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Geek>().HasKey(x => x.GeekId);
-            modelBuilder.Entity<Geek>().HasIndex(x => x.UsernameLower).HasName("Geek_UsernameLower");
+            modelBuilder.Entity<Geek>().HasIndex(x => x.UsernameLower).HasName("Geek_UsernameLower").IsUnique();
 
             modelBuilder.Entity<Geek>().Property(x => x.GeekId).ValueGeneratedOnAdd();
             modelBuilder.Entity<Geek>().Property(x => x.Username).IsRequired().HasMaxLength(500);        

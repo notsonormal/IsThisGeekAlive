@@ -45,14 +45,11 @@ namespace IsThisGeekAlive.ViewModels
         [DisplayFormat(DataFormatString = "{0:f} ({0:zzz})", ApplyFormatInEditMode = true)]
         public DateTimeOffset LastActivityServerTime { get; set; }
        
-
         public bool DoesGeekExist { get; set; }
         public bool AlwaysShowPingTimes { get; set; }
 
         public bool HasHitDangerThreshold()
         {            
-            TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time"));
-
             TimeSpan since = GetTimeSince();
             return since.TotalHours > NotAliveDangerWindow;
         }
@@ -64,13 +61,16 @@ namespace IsThisGeekAlive.ViewModels
         }
 
         /// <summary>
-        /// e.g. 1 day(s) and 3 hour(s) ago
+        /// e.g. 1 day and 3 hours
         /// </summary>
         /// <returns></returns>
         public string LastPingDaysAndHoursAgo()
         {
             TimeSpan since = GetTimeSince();
-            return string.Format("{0} day(s) and {1} hour(s) ago", since.Days, since.Hours);
+            string days = since.Days == 1 ? "day" : "days";
+            string hours = since.Hours == 1 ? "hour" : "hours";
+
+            return $"{since.Days} {days} and {since.Hours} {hours}";
         }
 
         public bool ShowActivityDates()

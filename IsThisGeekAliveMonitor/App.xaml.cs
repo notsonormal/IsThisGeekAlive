@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
 
 namespace IsThisGeekAliveMonitor
@@ -54,14 +55,20 @@ namespace IsThisGeekAliveMonitor
         {
             _notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
             _notifyIcon.DataContext = new NotifyIconViewModel();
+            _notifyIcon.TrayBalloonTipClicked += OnTrayBalloonTipClicked;
 
             Messenger.Default.Register<PingFailedMessage>(this, (m) =>
             {
                 if (_notifyIcon.IsDisposed)
                     return;
 
-                _notifyIcon.ShowBalloonTip(ProjectUtils.GetProjectName(), m.ErrorMessage, BalloonIcon.Error);
+                _notifyIcon.ShowBalloonTip(null, m.ErrorMessage, BalloonIcon.Error);
             });
+        }
+
+        void OnTrayBalloonTipClicked(object sender, RoutedEventArgs e)
+        {
+            ((NotifyIconViewModel)_notifyIcon.DataContext).ShowWindow();
         }
 
         void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -70,7 +77,7 @@ namespace IsThisGeekAliveMonitor
 
             e.Dispatcher.Invoke(() =>
             {
-                _notifyIcon.ShowBalloonTip(ProjectUtils.GetProjectName(), e.Exception.Message, BalloonIcon.Error);
+                _notifyIcon.ShowBalloonTip(null, e.Exception.Message, BalloonIcon.Error);
             });
 
             e.Handled = true;

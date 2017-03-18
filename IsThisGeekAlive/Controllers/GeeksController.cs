@@ -65,7 +65,7 @@ namespace IsThisGeekAlive.Controllers
 
             if (string.IsNullOrWhiteSpace(viewModel.Geek.Username))
             {
-                ModelState.AddModelError("Username", "The username field is required");
+                ModelState.AddModelError("Geek.Username", "The username field is required");
                 return View("Index", viewModel);
             }
 
@@ -95,7 +95,7 @@ namespace IsThisGeekAlive.Controllers
             {
                 if (geek.LoginCode != viewModel.ManualLoginCode)
                 {
-                    ModelState.AddModelError("Username", "The login code must match the previously set login code");
+                    ModelState.AddModelError("ManualLoginCode", "The login code must match the previously set login code");
                     return View("Index", viewModel);
                 }
 

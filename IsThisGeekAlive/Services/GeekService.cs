@@ -53,10 +53,48 @@ namespace IsThisGeekAlive.Services
         {
             _geekContext.Database.EnsureCreated();
 
-            username = username?.Trim();
-            string usernameLower = username?.ToLower();
+            username = username?.Trim() ?? "";
+            string usernameLower = username.ToLower();
 
-            return _geekContext.Geeks.SingleOrDefault(x => x.UsernameLower == usernameLower);
+            var geek = _geekContext.Geeks.SingleOrDefault(x => x.UsernameLower == usernameLower);
+
+            if (geek == null && username.StartsWith("TEST"))
+            {
+                geek = GetTestGeek(username);
+            }
+
+            return geek;
+        }
+
+        Geek GetTestGeek(string username)
+        {
+            // e.g. TEST,JohnSmith,20
+
+            DateTimeOffset calculatedTime = DateTimeOffset.Now;
+
+            string[] split = username.Split(',');
+            string testUsername = split.Length > 0 ? split[1] : "[Test User]";
+
+            int hoursAgo;                        
+            if (split.Length > 1 && int.TryParse(split[2], out hoursAgo))
+            {
+                calculatedTime = calculatedTime.AddHours(-hoursAgo);
+            }
+
+            return new Geek()
+            {
+                GeekId = 999999,
+                Username = testUsername,
+                UsernameLower = testUsername.ToLower(),
+                NotAliveWarningWindow = Geek.DefaultNotAliveWarningWindow,
+                NotAliveDangerWindow = Geek.DefaultNotAliveDangerWindow,
+                LoginCode = "-1",
+                LastActivityLocalTime = calculatedTime.UtcDateTime,
+                LastActivityLocalTimeUtcOffset = (short)calculatedTime.Offset.TotalMinutes,
+
+                LastActivityServerTime = calculatedTime.UtcDateTime.AddSeconds(40),
+                LastActivityServerTimeUtcOffset = (short)calculatedTime.Offset.TotalMinutes
+            };
         }
     }
 }

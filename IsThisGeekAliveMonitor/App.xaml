@@ -7,12 +7,13 @@
     xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d1p1:Ignorable="d"     
     ShutdownMode="OnExplicitShutdown">
-
+    
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="NotifyIconResources.xaml" />
+                <ResourceDictionary Source="Themes/WhistlerBlue/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>        
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

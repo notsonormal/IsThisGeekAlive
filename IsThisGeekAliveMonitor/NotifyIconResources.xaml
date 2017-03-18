@@ -2,15 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:IsThisGeekAliveMonitor"
                     xmlns:tb="http://www.hardcodet.net/taskbar">
-
+    
     <tb:TaskbarIcon 
                 x:Key="NotifyIcon"
                 Visibility="Visible"
-                ToolTipText="Is This Geek Alive Monitor"
+                ToolTipText="Is This Geek Alive Monitor"        
                 IconSource="/Dead.ico"
                 MenuActivation="LeftOrRightClick"
                 DoubleClickCommand="{Binding ShowWindowCommand}">
-
+        
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Show Window" Command="{Binding ShowWindowCommand}"/>

@@ -1,51 +1,61 @@
-@model IsThisGeekAlive.ViewModels.GeeksIndexViewModel
+   @model IsThisGeekAlive.ViewModels.GeeksIndexViewModel
 
 <br />
 
 @if (Model.Geek.HasHitDangerThreshold())
 {
-    <div class="text-danger">
-        <b>@Model.Geek.Username</b> has not logged onto his computer since <b>@Model.Geek.LastPingDaysAndHoursAgo())</b>
-        This is the configured <i>danger</i> threshold. You should probably be worried.
-    </div>
+    <p>       
+        @Html.BoldTextFor(m => m.Geek.Username) has not logged onto his computer in @Html.BoldText(Model.Geek.LastPingDaysAndHoursAgo()).
+    </p>
+
+    <p class="alert alert-danger">                        
+        This has exceeded the configured @Html.BoldText(Thresholds.DangerThreshold) threshold of @Html.BoldTextFor(m => m.Geek.NotAliveDangerWindow) hours. 
+        You should probably be worried.
+    </p>
 }
 else if (Model.Geek.HasHitWarningThreshold())
 {
-    <div class="text-warning">
-        <b>@Model.Geek.Username</b> has not logged onto his computer since <b>@Model.Geek.LastPingDaysAndHoursAgo())</b>
-        This is the configured <i>concern</i> threshold.
-    </div>
+    <p>
+        @Html.BoldTextFor(m => m.Geek.Username) has not logged onto his computer in @Html.BoldText(Model.Geek.LastPingDaysAndHoursAgo()).
+    </p>
+
+    <p class="alert alert-warning">
+        This has exceeded the configured @Html.BoldText(Thresholds.ConcernThreshold) threshold of @Html.BoldTextFor(m => m.Geek.NotAliveWarningWindow) hours.         
+        It has NOT exceeded the configured @Html.BoldText(Thresholds.DangerThreshold)threshold of @Html.BoldTextFor(m => m.Geek.NotAliveDangerWindow) hours.
+    </p>
 }
 else
 {
-    <div>
-        Don't worry, <b>@Model.Geek.Username</b> has logged onto his computer within the last <b>@Model.Geek.NotAliveWarningWindow</b> hours.
-    </div>
+    <p>
+        Don't worry; @Html.BoldTextFor(m => m.Geek.Username) has logged onto his computer within the last @Html.BoldTextFor(m => m.Geek.NotAliveWarningWindow) hours.
+    </p>
+
+    <br/>
 }
 
 @if (Model.Geek.ShowActivityDates())
 {
-    <br />
-
     <div class="panel panel-default">
         <div class="panel-body">
             <p>
-                The last time <b>@Model.Geek.Username</b> logged on was <b>@Html.DisplayFor(m => m.Geek.LastActivityLocalTime)</b> based on the geek's timezone.
+                The last time @Html.BoldTextFor(m => m.Geek.Username) logged on was @Html.BoldTextFor(m => m.Geek.LastActivityLocalTime) based on the geek's timezone.
             </p>
 
             <p>
-                Or <b>@Html.DisplayFor(m => m.Geek.LastActivityServerTime)</b> based on this website's timezone.
+                Or @Html.BoldTextFor(m => m.Geek.LastActivityServerTime) based on this website's timezone.
             </p>
 
             <div class="small">
                 <p>
-                    * <i>The geek's timezone depends on the computer clock so it may not be accurate.</i>
+                    * 
+                    <i>The geek's timezone depends on the computer clock so it may not be accurate.</i>
                 </p>
             </div>
 
             <div class="small">
                 <p>
-                    ** <i>
+                    ** 
+                    <i>
                         The value in backets indicates the timezone hour difference from <a href="https://www.timeanddate.com/time/aboututc.html">UTC time</a>
                         - e.g. <a href="https://www.timeanddate.com/worldclock/australia/brisbane">Brisbane</a> is UTC +10:00 so 10am in UTC is 8pm in Brisbane.
                     </i>
