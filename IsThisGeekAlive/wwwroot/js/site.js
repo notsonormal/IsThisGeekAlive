@@ -12,13 +12,6 @@
         $('#howDoesThisWorkDiv').show();               
     });
 
-    $('#applicationImagesBtn').click(function () {
-        $('.buttonDivs').hide();
-        $('#SelectManualLogin').val('False');
-
-        $('#applicationImagesDiv').show();
-    });
-
     $('#manualLoginBtn').click(function () {
         $('.buttonDivs').hide();
 

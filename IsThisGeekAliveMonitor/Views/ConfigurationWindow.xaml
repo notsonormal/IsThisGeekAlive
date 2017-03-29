@@ -3,14 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:clr="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:IsThisGeekAliveMonitor.Views"
         mc:Ignorable="d"
-        Title="Is This Geek Alive Monitor Config" 
+        Title="Is This Geek Alive Monitor" 
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
     <Grid Margin="2,2,2,2">
         <Grid.Resources>
+            <clr:String x:Key="CurrentTimeZoneDesignTimeValue">
+                Your current timezone seems to be (UTC+00:00) Dublin, Edinburgh, Lisbon, London
+            </clr:String>
+            
             <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                 <Setter Property="Margin" Value="2,2,2,2"/>
             </Style>
@@ -35,7 +40,9 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -50,24 +57,34 @@
         <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Path=IsThisGeekAliveApiUrl, ValidatesOnExceptions=True}"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Geek Username"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="200" HorizontalAlignment="Left" Text="{Binding Path=GeekUsername, ValidatesOnExceptions=True}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="100" HorizontalAlignment="Left" Text="{Binding Path=GeekUsername, ValidatesOnExceptions=True}"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Login Code"/>
         <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Width="100" HorizontalAlignment="Left" Text="{Binding Path=GeekLoginCode, ValidatesOnExceptions=True}"/>
 
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Login every"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=LoginInterval, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=LoginInterval, ValidatesOnExceptions=True}"/>
         <TextBlock Grid.Row="3" Grid.Column="2" Text="minutes"/>
 
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Not alive warning window"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=NotAliveWarningWindow, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
-        <TextBlock Grid.Row="4" Grid.Column="2" Text="in hours"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=NotAliveWarningWindow, ValidatesOnExceptions=True}"/>
+        <TextBlock Grid.Row="4" Grid.Column="2" Text="hours"/>
 
         <TextBlock Grid.Row="5" Grid.Column="0" Text="Not alive danger window"/>
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=NotAliveDangerWindow, ValidatesOnExceptions=True}" HorizontalContentAlignment="Right"/>
-        <TextBlock Grid.Row="5" Grid.Column="2" Text="in hours"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=NotAliveDangerWindow, ValidatesOnExceptions=True}"/>
+        <TextBlock Grid.Row="5" Grid.Column="2" Text="hours"/>
 
-        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" 
+                   Text="{Binding Path=CurrentTimeZone, Mode=OneWay, StringFormat=Your current timezone seems to be {0}, FallbackValue={StaticResource CurrentTimeZoneDesignTimeValue}}"
+                   ToolTip="{Binding Path=CurrentTimeZone, Mode=OneWay}"/>
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" ToolTip="{Binding Path=GitHubPageUrl, Mode=OneWay}">
+            <Hyperlink Command="{Binding OpenGitHubPageCommand}">
+                Click here for more information and source code
+            </Hyperlink>
+        </TextBlock>
+
+        <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Save" Width="80" Height="30" Command="{Binding SaveCommand}" IsDefault="True"/>
             <Button Content="Cancel" Width="80" Height="30" Command="{Binding CancelCommand}" IsCancel="True"/>
         </StackPanel>

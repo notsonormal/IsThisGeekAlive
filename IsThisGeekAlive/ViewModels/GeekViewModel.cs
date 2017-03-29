@@ -16,20 +16,25 @@ namespace IsThisGeekAlive.ViewModels
 
         public GeekViewModel(Geek geek)
         {
-            GeekId = geek.GeekId;
-            Username = geek.Username;
-            UsernameLower = geek.UsernameLower;
-            LoginCode = geek.LoginCode;
-            NotAliveWarningWindow = geek.NotAliveWarningWindow;
-            NotAliveDangerWindow = geek.NotAliveDangerWindow;
+            if (geek != null)
+            {
+                GeekId = geek.GeekId;
+                Username = geek.Username;
+                UsernameLower = geek.UsernameLower;
+                LoginCode = geek.LoginCode;
+                NotAliveWarningWindow = geek.NotAliveWarningWindow;
+                NotAliveDangerWindow = geek.NotAliveDangerWindow;
 
-            LastActivityLocalTime = new DateTimeOffset(
-                geek.LastActivityLocalTime,
-                TimeSpan.FromMinutes(geek.LastActivityLocalTimeUtcOffset));
+                LastActivityLocalTime = new DateTimeOffset(
+                    geek.LastActivityLocalTime,
+                    TimeSpan.FromMinutes(geek.LastActivityLocalTimeUtcOffset));
 
-            LastActivityServerTime = new DateTimeOffset(
-                geek.LastActivityServerTime,
-                TimeSpan.FromMinutes(geek.LastActivityServerTimeUtcOffset));
+                LastActivityServerTime = new DateTimeOffset(
+                    geek.LastActivityServerTime,
+                    TimeSpan.FromMinutes(geek.LastActivityServerTimeUtcOffset));
+
+                DoesGeekExist = true;
+            }
         }
 
         public int GeekId { get; set; }    

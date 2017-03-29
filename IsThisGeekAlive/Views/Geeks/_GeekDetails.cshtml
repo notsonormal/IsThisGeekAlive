@@ -1,7 +1,5 @@
    @model IsThisGeekAlive.ViewModels.GeeksIndexViewModel
 
-<br />
-
 @if (Model.Geek.HasHitDangerThreshold())
 {
     <p>       
@@ -29,8 +27,6 @@ else
     <p>
         Don't worry; @Html.BoldTextFor(m => m.Geek.Username) has logged onto his computer within the last @Html.BoldTextFor(m => m.Geek.NotAliveWarningWindow) hours.
     </p>
-
-    <br/>
 }
 
 @if (Model.Geek.ShowActivityDates())

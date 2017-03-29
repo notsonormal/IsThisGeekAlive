@@ -3,9 +3,14 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <p>
-            The geek installs a monitor application on their PC. The application periodically tells this website that the geek is logged in.
-            When a person using this website checks for the geek, it checks the last activity time of the geek and then calculates whether
-            the geek activity is in the @Html.BoldText(Thresholds.RecentlyThreshold), @Html.BoldText(Thresholds.ConcernThreshold) or @Html.BoldText(Thresholds.DangerThreshold) period.
+            The geek installs the monitor application on their PC. The application periodically tells the website that the user is 
+            currently logged in. Normally it sends an update once every 10 minutes. 
+        </p>
+
+        <p>
+            If you want to know the status of a geek, you use this website to search for him. At that point the website will look for the geek
+            and find the last time the monitor sent an update. From that it calculates whether the geek is in the @Html.BoldText(Thresholds.RecentlyThreshold), 
+            @Html.BoldText(Thresholds.ConcernThreshold) or @Html.BoldText(Thresholds.DangerThreshold) period.
         </p>
 
         <p>
@@ -19,7 +24,13 @@
         </ul>
 
         <p>
-            For privacy reasons, as long as the user has logged into his computer @Html.BoldText(Thresholds.RecentlyThreshold), their last activity time is not shown.
+            For example, if the geek logged in yesterday then he is in the @Html.BoldText(Thresholds.RecentlyThreshold) period. 
+            If on the other hand, he hasn't logged since four days ago then he is in the @Html.BoldText(Thresholds.ConcernThreshold) period.
+            And if he hasn't logged in since last week then he is in the @Html.BoldText(Thresholds.DangerThreshold) period.
+        </p>
+
+        <p>
+            For privacy reasons, as long as the user has logged into his computer @Html.BoldText(Thresholds.RecentlyThreshold), their last login time is not shown.
         </p>       
     </div>
 </div>

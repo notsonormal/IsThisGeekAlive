@@ -1,4 +1,4 @@
-﻿#define MyAppName "Is This Geek Alive Monitor"
+#define MyAppName "Is This Geek Alive Monitor"
 #define MyAppVersion "1.0.0.0"
 #define MyAppPublisher "Astounding Applications"
 #define MyAppURL "http://www.astoundingapplications.com/"
@@ -43,15 +43,63 @@ Source: "..\InnoSetup\NetFrameworkInstaller_4.5.2.exe"; DestDir: {tmp}; Flags: d
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
 [Run]
-Filename: "{tmp}\NetFrameworkInstaller_4.5.2.exe"; Parameters: "/q:a /c:""install /l /q"""; Check: CheckForFramework; StatusMsg: Microsoft Framework 4.5.2 Framework is being installed. Please wait...
+Filename: "{tmp}\NetFrameworkInstaller_4.5.2.exe"; Parameters: "/q:a /c:""install /l /q"""; Check: Framework45IsNotInstalled; StatusMsg: Microsoft Framework 4.5.2 Framework is being installed. Please wait...
 Filename: "{app}\IsThisGeekAliveMonitor.exe"; Description: "{cm:LaunchProgram,Is This Geek Alive Monitor}"; Flags: nowait postinstall skipifsilent
 
 [Code]
-procedure CurStepChanged(CurStep: TSetupStep);
+function GetUninstallString(AppId: String): String;
+var
+  sUnInstPath: String;
+  sUnInstallString: String;
 begin
-  if (CurStep=ssInstall) then
-  begin
-    InstallStep();
+  sUnInstPath := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\' + AppId + '_is1';
+
+  sUnInstallString := '';
+  if not RegQueryStringValue(HKLM, sUnInstPath, 'UninstallString', sUnInstallString) then
+    RegQueryStringValue(HKCU, sUnInstPath, 'UninstallString', sUnInstallString);
+  Result := sUnInstallString;
+end;
+
+function IsUpgrade(AppId: String): Boolean;
+begin
+  Result := (GetUninstallString(AppId) <> '');
+end;
+
+function UnInstallOldVersion(AppId: String): Integer;
+var
+  sUnInstallString: String;
+  iResultCode: Integer;
+begin
+// Return Values:
+// 1 - uninstall string is empty
+// 2 - error executing the UnInstallString
+// 3 - successfully executed the UnInstallString
+
+  // default return value
+  Result := 0;
+
+  // get the uninstall string of the old app
+  sUnInstallString := GetUninstallString(AppId);
+  if sUnInstallString <> '' then begin
+    sUnInstallString := RemoveQuotes(sUnInstallString);
+    if Exec(sUnInstallString, '/SILENT /NORESTART /SUPPRESSMSGBOXES','', SW_HIDE, ewWaitUntilTerminated, iResultCode) then
+      Result := 3
+    else
+      Result := 2;
+  end else
+    Result := 1;
+end;
+
+function Framework45IsNotInstalled(): Boolean;
+var
+  bSuccess: Boolean;
+  regVersion: Cardinal;
+begin
+  Result := True;
+
+  bSuccess := RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Full', '�Release', regVersion);
+  if (True = bSuccess) and (regVersion >= 378389) then begin
+    Result := False;
   end;
 end;
 
@@ -65,17 +113,12 @@ begin
     begin
       UnInstallOldVersion(AppId);
     end;
-end
+end;
 
-function Framework45IsNotInstalled(): Boolean;
-var
-  bSuccess: Boolean;
-  regVersion: Cardinal;
+procedure CurStepChanged(CurStep: TSetupStep);
 begin
-  Result := True;
-
-  bSuccess := RegQueryDWordValue(HKLM, ‘Software\Microsoft\NET Framework Setup\NDP\v4\Full’, ‘Release’, regVersion);
-  if (True = bSuccess) and (regVersion >= 378389) then begin
-    Result := False;
+  if (CurStep=ssInstall) then
+  begin
+    InstallStep();
   end;
 end;

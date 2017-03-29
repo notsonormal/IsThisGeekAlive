@@ -13,6 +13,8 @@ using IsThisGeekAlive.Services;
 using IsThisGeekAlive.ViewModels;
 using IsThisGeekAlive.Utils;
 using Microsoft.Extensions.Options;
+using MySql.Data.MySqlClient;
+using System.Diagnostics;
 
 namespace IsThisGeekAlive.Controllers
 {
@@ -41,20 +43,58 @@ namespace IsThisGeekAlive.Controllers
             if (Log.IsEnabled(LogLevel.Debug))
                 Log.LogDebug("GET: /Geeks/Index");
 
-            GeekViewModel geekViewModel = GetGeek(username);
+            var viewModel = new GeeksIndexViewModel()
+            {
+                ManualLoginUsername = manualLoginUsername,
+                ManualLoginCode = manualLoginCode,
+                Message = message,
+            };
 
-            if (!string.IsNullOrWhiteSpace(username) && geekViewModel.GeekId == 0)
+            GeekViewModel geekViewModel = GetGeek(username);
+            viewModel.Geek = geekViewModel;
+
+            if (!string.IsNullOrWhiteSpace(username) && !geekViewModel.DoesGeekExist)
             {
                 ModelState.AddModelError("Geek.Username", "No geek has been found with that username");
             }
 
-            return View(new GeeksIndexViewModel()
+            /*
+            string sqlErrorMessage = "There was problem getting the details from the database. Please try reloading the page";
+            
+            try
+            {        
+                GeekViewModel geekViewModel = GetGeek(username);
+                viewModel.Geek = geekViewModel;
+
+                if (!string.IsNullOrWhiteSpace(username) && geekViewModel.GeekId == 0)
+                {
+                    ModelState.AddModelError("Geek.Username", "No geek has been found with that username");
+                }                    
+            }
+            catch (MySqlException ex)
             {
-                Geek = geekViewModel,
-                ManualLoginUsername = manualLoginUsername,
-                ManualLoginCode = manualLoginCode,  
-                Message = message,
-            });
+                Debug.WriteLine(ex.ToString());
+                _logger.LogError("Exception trying to get the geek from the database, {0}", ex);
+
+                ModelState.AddModelError("Geek.Username", sqlErrorMessage);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                _logger.LogError("Exception trying to get the geek from the database, {0}", ex);
+
+                if (ex.ObjectName == "System.Net.Sockets.Socket")
+                {
+                    ModelState.AddModelError("Geek.Username", sqlErrorMessage);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            */
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -139,16 +179,29 @@ namespace IsThisGeekAlive.Controllers
 
         GeekViewModel GetGeek(string username)
         {
-            GeekViewModel geekViewModel = new GeekViewModel();            
+            GeekViewModel geekViewModel = new GeekViewModel();
 
             if (username != null)
             {
-                var geek = _geekService.GetGeekByUsername(username);
-
-                if (geek != null)
+                try
                 {
+                    var geek = _geekService.GetGeekByUsername(username);
                     geekViewModel = new GeekViewModel(geek);
-                    geekViewModel.DoesGeekExist = true;
+                }
+                catch (Exception ex) when (ex is ObjectDisposedException || ex is MySqlException)
+                {
+                    // The database connection occasionally times out when this is hosted on a free
+                    // Microsoft Azure instance. The second request should work and this saves 
+                    // us having to ask the user to reload the page
+
+                    string errorMessage =
+                        "Got exception when trying to get the geek from the database. " +
+                        "Assuming it's just a timeout and repeating the database call, {0}";
+
+                    Log.LogError(errorMessage, ex);
+
+                    var geek = _geekService.GetGeekByUsername(username);
+                    geekViewModel = new GeekViewModel(geek);
                 }
             }
 

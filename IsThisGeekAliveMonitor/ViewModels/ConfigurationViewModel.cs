@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Messaging;
 using IsThisGeekAliveMonitor.MvvmLightViewService;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,17 @@ namespace IsThisGeekAliveMonitor.ViewModels
     {
         public ConfigurationViewModel()
         {
-
         }
+
+        public string CurrentTimeZone
+        {
+            get
+            {
+                return string.Format("{0}", TimeZoneInfo.Local.DisplayName);
+            }
+        }
+
+        public string GitHubPageUrl { get { return "https://github.com/notsonormal/IsThisGeekAlive"; } }
 
         public string IsThisGeekAliveApiUrl
         {
@@ -97,7 +107,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
 
                 IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveWarningWindow = value;
             }
-        }
+        }        
 
         public int NotAliveDangerWindow
         {
@@ -115,7 +125,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
 
                 IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveDangerWindow = value;
             }
-        }
+        }        
 
         public ICommand SaveCommand
         {
@@ -137,6 +147,17 @@ namespace IsThisGeekAliveMonitor.ViewModels
                 return new RelayCommand(() =>
                 {
                     Messenger.Default.Send<CloseViewMessage>(new CloseViewMessage(this, false), this);
+                });
+            }
+        }
+
+        public ICommand OpenGitHubPageCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    Process.Start(new ProcessStartInfo(GitHubPageUrl));
                 });
             }
         }
