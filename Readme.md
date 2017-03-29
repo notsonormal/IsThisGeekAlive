@@ -9,7 +9,6 @@ To contact me, you can find my email address on my github profile https://github
 
 Images
 
-[Example website image](WebsiteExampleImage.png)
+[[(WebsiteExampleImage.png|alt=Example website image]]
 
-[Example monitor image](MonitorExampleImage.png)
-
+[[(MonitorExampleImage.png|alt=Example monitor image]]
