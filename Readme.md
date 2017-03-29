@@ -13,7 +13,4 @@ Images
 
 ![Example website image](WebsiteExampleImage.png)
 
-
-[[(WebsiteExampleImage.png|alt=Example website image]]
-
-[[(MonitorExampleImage.png|alt=Example monitor image]]
+![Example monitor image](MonitorExampleImage.png)
