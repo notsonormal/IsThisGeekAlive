@@ -59,10 +59,10 @@ namespace IsThisGeekAliveMonitor
 
             Messenger.Default.Register<PingFailedMessage>(this, (m) =>
             {
-                if (_notifyIcon.IsDisposed)
-                    return;
-
-                _notifyIcon.ShowBalloonTip(null, m.ErrorMessage, BalloonIcon.Error);
+                if (!_notifyIcon.IsDisposed)
+                {
+                    _notifyIcon.ShowBalloonTip(null, m.ErrorMessage, BalloonIcon.Error);
+                }                
             });
         }
 
@@ -75,10 +75,13 @@ namespace IsThisGeekAliveMonitor
         {
             Debug.WriteLine(string.Format("Unhandled exception: {0}", e.Exception.ToString()));
 
-            e.Dispatcher.Invoke(() =>
+            if (!_notifyIcon.IsDisposed)
             {
-                _notifyIcon.ShowBalloonTip(null, e.Exception.Message, BalloonIcon.Error);
-            });
+                e.Dispatcher.Invoke(() =>
+                {
+                    _notifyIcon.ShowBalloonTip(null, e.Exception.Message, BalloonIcon.Error);
+                });
+            };
 
             e.Handled = true;
         }

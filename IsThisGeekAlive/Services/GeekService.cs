@@ -92,7 +92,7 @@ namespace IsThisGeekAlive.Services
                 LastActivityLocalTime = calculatedTime.UtcDateTime,
                 LastActivityLocalTimeUtcOffset = (short)calculatedTime.Offset.TotalMinutes,
 
-                LastActivityServerTime = calculatedTime.UtcDateTime.AddSeconds(40),
+                LastActivityServerTime = calculatedTime.UtcDateTime,
                 LastActivityServerTimeUtcOffset = (short)calculatedTime.Offset.TotalMinutes
             };
         }

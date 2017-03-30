@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using IsThisGeekAliveMonitor.MvvmLightViewService;
+using IsThisGeekAliveMonitor.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,8 +15,11 @@ namespace IsThisGeekAliveMonitor.ViewModels
 {
     public class ConfigurationViewModel : ViewModelBase
     {
+        MonitorSettings _settings;
+
         public ConfigurationViewModel()
         {
+            _settings = MonitorSettings.Load();
         }
 
         public string CurrentTimeZone
@@ -32,14 +36,14 @@ namespace IsThisGeekAliveMonitor.ViewModels
         {
             get
             {
-                return IsThisGeekAliveMonitor.Properties.Settings.Default.IsThisGeekAliveApiUrl;
+                return _settings.IsThisGeekAliveApiUrl;
             }
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException("API Url is required");
 
-                IsThisGeekAliveMonitor.Properties.Settings.Default.IsThisGeekAliveApiUrl = value;
+                _settings.IsThisGeekAliveApiUrl = value;
             }
         }
 
@@ -47,7 +51,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
         {
             get
             {
-                return IsThisGeekAliveMonitor.Properties.Settings.Default.GeekUsername;
+                return _settings.GeekUsername;
             }
             set
             {
@@ -57,7 +61,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
                 if (value.Length < 5)
                     throw new ArgumentException("Geek username must be at least 5 characters");
 
-                IsThisGeekAliveMonitor.Properties.Settings.Default.GeekUsername = value;
+                _settings.GeekUsername = value;
             }
         }
 
@@ -65,7 +69,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
         {
             get
             {
-                return IsThisGeekAliveMonitor.Properties.Settings.Default.GeekLoginCode;
+                return _settings.GeekLoginCode;
             }
             set
             {
@@ -75,7 +79,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
                 if (value.Length < 5)
                     throw new ArgumentException("Login code must be at least 5 characters");
 
-                IsThisGeekAliveMonitor.Properties.Settings.Default.GeekLoginCode = value;
+                _settings.GeekLoginCode = value;
             }
         }
 
@@ -83,14 +87,14 @@ namespace IsThisGeekAliveMonitor.ViewModels
         {
             get
             {
-                return IsThisGeekAliveMonitor.Properties.Settings.Default.LoginInterval;
+                return _settings.LoginInterval;
             }
             set
             {
                 if (value <= 1 || value > 60)
                     throw new ArgumentException("Ping interval must be between 1 and 60 minutes");
 
-                IsThisGeekAliveMonitor.Properties.Settings.Default.LoginInterval = value;
+                _settings.LoginInterval = value;
             }
         }
 
@@ -98,14 +102,14 @@ namespace IsThisGeekAliveMonitor.ViewModels
         {
             get
             {
-                return IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveWarningWindow;
+                return _settings.NotAliveWarningWindow;
             }
             set
             {
                 if (value <= 12 || value > 60)
                     throw new ArgumentException("The not alive warning window must be at least 12 hours");
 
-                IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveWarningWindow = value;
+                _settings.NotAliveWarningWindow = value;
             }
         }        
 
@@ -113,7 +117,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
         {
             get
             {
-                return IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveDangerWindow;
+                return _settings.NotAliveDangerWindow;
             }
             set
             {
@@ -123,7 +127,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
                 if (value < NotAliveWarningWindow)
                     throw new ArgumentException("The not alive danger window must be equal to or greater than the warning window");
 
-                IsThisGeekAliveMonitor.Properties.Settings.Default.NotAliveDangerWindow = value;
+                _settings.NotAliveDangerWindow = value;
             }
         }        
 
@@ -133,7 +137,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    IsThisGeekAliveMonitor.Properties.Settings.Default.Save();
+                    _settings.Save();                            
 
                     Messenger.Default.Send<CloseViewMessage>(new CloseViewMessage(this, true), this);
                 });

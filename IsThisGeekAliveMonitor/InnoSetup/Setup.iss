@@ -1,5 +1,5 @@
 #define MyAppName "Is This Geek Alive Monitor"
-#define MyAppVersion "1.0.0.0"
+#define MyAppVersion "1.0"
 #define MyAppPublisher "Astounding Applications"
 #define MyAppURL "http://www.astoundingapplications.com/"
 #define MyAppExeName "IsThisGeekAliveMonitor"
@@ -11,19 +11,20 @@
 AppId={{B28ED083-688E-4EA8-8713-12565BF6450D}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName=C:\{pf}\{#MyAppName}
+DefaultDirName={pf}\{#MyAppName}
 DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=IsThisGeekAliveMonitorSetup
+OutputBaseFilename={#MyAppExeName}Setup
 Compression=lzma
 SolidCompression=yes
 PrivilegesRequired=admin
+UninstallDisplayIcon={app}\{#MyAppExeName}.exe
+UninstallDisplayName={#MyAppName}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -34,7 +35,6 @@ root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 
 [Files]
 Source: "..\bin\Release\IsThisGeekAliveMonitor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\bin\Release\IsThisGeekAliveMonitor.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\Release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\InnoSetup\NetFrameworkInstaller_4.5.2.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Check: Framework45IsNotInstalled
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
@@ -97,7 +97,7 @@ var
 begin
   Result := True;
 
-  bSuccess := RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Full', '˜Release', regVersion);
+  bSuccess := RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Full', 'Release', regVersion);
   if (True = bSuccess) and (regVersion >= 378389) then begin
     Result := False;
   end;

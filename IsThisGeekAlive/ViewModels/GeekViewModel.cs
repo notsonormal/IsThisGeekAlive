@@ -25,17 +25,12 @@ namespace IsThisGeekAlive.ViewModels
                 NotAliveWarningWindow = geek.NotAliveWarningWindow;
                 NotAliveDangerWindow = geek.NotAliveDangerWindow;
 
-                LastActivityLocalTime = new DateTimeOffset(
-                    geek.LastActivityLocalTime,
-                    TimeSpan.FromMinutes(geek.LastActivityLocalTimeUtcOffset));
-
-                LastActivityServerTime = new DateTimeOffset(
-                    geek.LastActivityServerTime,
-                    TimeSpan.FromMinutes(geek.LastActivityServerTimeUtcOffset));
+                LastActivityLocalTime = CreateActivityTime(geek.LastActivityLocalTime, geek.LastActivityLocalTimeUtcOffset);
+                LastActivityServerTime = CreateActivityTime(geek.LastActivityServerTime, geek.LastActivityServerTimeUtcOffset);
 
                 DoesGeekExist = true;
             }
-        }
+        }        
 
         public int GeekId { get; set; }    
         public string Username { get; set; }
@@ -86,6 +81,11 @@ namespace IsThisGeekAlive.ViewModels
         TimeSpan GetTimeSince()
         {
             return DateTime.UtcNow - LastActivityServerTime.ToUniversalTime();
+        }
+
+        DateTimeOffset CreateActivityTime(DateTime activityTime, int utcOffset)
+        {
+            return new DateTimeOffset(activityTime).ToOffset(TimeSpan.FromMinutes(utcOffset));
         }
     }
 }

@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using IsThisGeekAliveMonitor.MvvmLightViewService;
 using IsThisGeekAliveMonitor.Services;
+using IsThisGeekAliveMonitor.Utils;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -18,6 +19,13 @@ namespace IsThisGeekAliveMonitor.ViewModels
         {
             _pingService = new GeekPingService();
             _pingService.Start();
+
+            var settings = MonitorSettings.Load();
+
+            if (string.IsNullOrWhiteSpace(settings.GeekUsername))
+            {
+                ShowWindow();
+            }
         }
 
         public void ShowWindow()

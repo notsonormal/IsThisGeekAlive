@@ -26,7 +26,7 @@
 
             <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                 <Setter Property="Margin" Value="2,2,2,2"/>
-                
+
                 <Style.Triggers>
                     <Trigger Property="Validation.HasError" Value="true">
                         <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self},Path=(Validation.Errors)[0].ErrorContent}"/>
@@ -57,21 +57,23 @@
         <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Path=IsThisGeekAliveApiUrl, ValidatesOnExceptions=True}"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Geek Username"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="100" HorizontalAlignment="Left" Text="{Binding Path=GeekUsername, ValidatesOnExceptions=True}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="100" HorizontalAlignment="Left" Name="GeekUsernameTxtBox"
+                 Text="{Binding Path=GeekUsername, ValidatesOnExceptions=True}"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Login Code"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Width="100" HorizontalAlignment="Left" Text="{Binding Path=GeekLoginCode, ValidatesOnExceptions=True}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Width="100" HorizontalAlignment="Left" Name="LoginCodeTxtBox"
+                 Text="{Binding Path=GeekLoginCode, ValidatesOnExceptions=True}"/>
 
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Login every"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=LoginInterval, ValidatesOnExceptions=True}"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Name="LoginIntervalTxtBox" Text="{Binding Path=LoginInterval, ValidatesOnExceptions=True}"/>
         <TextBlock Grid.Row="3" Grid.Column="2" Text="minutes"/>
 
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Not alive warning window"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=NotAliveWarningWindow, ValidatesOnExceptions=True}"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Name="NotAliveWarningWindowTxtBox" Text="{Binding Path=NotAliveWarningWindow, ValidatesOnExceptions=True}"/>
         <TextBlock Grid.Row="4" Grid.Column="2" Text="hours"/>
 
         <TextBlock Grid.Row="5" Grid.Column="0" Text="Not alive danger window"/>
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=NotAliveDangerWindow, ValidatesOnExceptions=True}"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Name="NotAliveDangerWindowTxtBox" Text="{Binding Path=NotAliveDangerWindow, ValidatesOnExceptions=True}"/>
         <TextBlock Grid.Row="5" Grid.Column="2" Text="hours"/>
 
         <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" 
@@ -85,7 +87,26 @@
         </TextBlock>
 
         <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Save" Width="80" Height="30" Command="{Binding SaveCommand}" IsDefault="True"/>
+            <Button Content="Save" Width="80" Height="30" Command="{Binding SaveCommand}" IsDefault="True">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="IsEnabled" Value="False"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=GeekUsernameTxtBox}" Value="False"/>
+                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=LoginCodeTxtBox}" Value="False"/>
+                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=LoginIntervalTxtBox}" Value="False"/>
+                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=NotAliveWarningWindowTxtBox}" Value="False"/>
+                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=NotAliveDangerWindowTxtBox}" Value="False"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
             <Button Content="Cancel" Width="80" Height="30" Command="{Binding CancelCommand}" IsCancel="True"/>
         </StackPanel>
     </Grid>

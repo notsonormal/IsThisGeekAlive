@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using IsThisGeekAliveMonitor.Models;
+using IsThisGeekAliveMonitor.Utils;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace IsThisGeekAliveMonitor.Services
             _backgroundWorker.WorkerSupportsCancellation = true;
             _backgroundWorker.DoWork += DoWork;
 
-            int pingInterval = Properties.Settings.Default.LoginInterval;
+            int pingInterval = MonitorSettings.Load().LoginInterval;
 
             _pingTimer = new Timer();
             _pingTimer.Interval = TimeSpan.FromMinutes(pingInterval).TotalMilliseconds;
@@ -52,7 +53,7 @@ namespace IsThisGeekAliveMonitor.Services
                 _backgroundWorker.RunWorkerAsync();
             }
 
-            int pingInterval = Properties.Settings.Default.LoginInterval;
+            int pingInterval = MonitorSettings.Load().LoginInterval;
             _pingTimer.Interval = TimeSpan.FromMinutes(pingInterval).TotalMilliseconds;
             _pingTimer.Start();
         }
@@ -62,11 +63,13 @@ namespace IsThisGeekAliveMonitor.Services
             if (_backgroundWorker.CancellationPending)
                 return;
 
-            string apiUrl = Properties.Settings.Default.IsThisGeekAliveApiUrl;
-            string geekUsername = Properties.Settings.Default.GeekUsername;
-            string geekLoginCode = Properties.Settings.Default.GeekLoginCode;
-            int notAliveWarningWindow = Properties.Settings.Default.NotAliveWarningWindow;
-            int notAliveDangerWindow = Properties.Settings.Default.NotAliveDangerWindow;
+            var settings = MonitorSettings.Load();
+
+            string apiUrl = settings.IsThisGeekAliveApiUrl;
+            string geekUsername = settings.GeekUsername;
+            string geekLoginCode = settings.GeekLoginCode;
+            int notAliveWarningWindow = settings.NotAliveWarningWindow;
+            int notAliveDangerWindow = settings.NotAliveDangerWindow;
 
             if (string.IsNullOrWhiteSpace(apiUrl))
             {
