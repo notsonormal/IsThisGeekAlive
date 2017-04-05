@@ -30,8 +30,8 @@ UninstallDisplayName={#MyAppName}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Registry]
-; When you uninstall the application, remove the "RunApplicationOnStartup" registry key if it was created
-root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "IsThisGeekAliveMonitor"; Flags: dontcreatekey uninsdeletevalue
+; When you uninstall the application, remove the "RunApplicationOnStartup" registry key
+root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "IsThisGeekAliveMonitor"; ValueData: """{app}\{#MyAppExeName}.exe"""; Flags: uninsdeletevalue
 
 [Files]
 Source: "..\bin\Release\IsThisGeekAliveMonitor.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -45,6 +45,9 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 [Run]
 Filename: "{tmp}\NetFrameworkInstaller_4.5.2.exe"; Parameters: "/q:a /c:""install /l /q"""; Check: Framework45IsNotInstalled; StatusMsg: Microsoft Framework 4.5.2 Framework is being installed. Please wait...
 Filename: "{app}\IsThisGeekAliveMonitor.exe"; Description: "{cm:LaunchProgram,Is This Geek Alive Monitor}"; Flags: nowait postinstall skipifsilent
+
+[Dirs]
+Name: {app}; Permissions: users-full
 
 [Code]
 function GetUninstallString(AppId: String): String;

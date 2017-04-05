@@ -13,5 +13,6 @@ namespace IsThisGeekAliveMonitor.MvvmLightViewService
 
         void OpenWindow(ViewModelBase viewModel);
         bool? OpenDialog(ViewModelBase viewModel);
+        bool ActivateWindow(ViewModelBase viewModel);
     }
 }

@@ -33,5 +33,7 @@ namespace IsThisGeekAlive.ViewModels
         public bool SelectManualLogin { get; set; }
 
         public short ClientUtcOffset { get; set; }
+
+        public bool IsGmtInDaylightSaving { get; set; }
     }
 }

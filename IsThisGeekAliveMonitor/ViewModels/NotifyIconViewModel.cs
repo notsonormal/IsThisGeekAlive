@@ -14,6 +14,7 @@ namespace IsThisGeekAliveMonitor.ViewModels
     public class NotifyIconViewModel : ViewModelBase
     {
         GeekPingService _pingService;
+        ConfigurationViewModel _configurationWindow;        
 
         public NotifyIconViewModel()
         {
@@ -30,13 +31,26 @@ namespace IsThisGeekAliveMonitor.ViewModels
 
         public void ShowWindow()
         {
-            bool? result = ServiceManager.OpenDialog(new ConfigurationViewModel());
-
-            if (result == true)
+            if (_configurationWindow == null)
             {
-                // Restart to immediately send a ping request with the new settings
-                _pingService.Stop();
-                _pingService.Start();
+                _configurationWindow = new ConfigurationViewModel();
+
+                bool? result = ServiceManager.OpenDialog(_configurationWindow);
+
+                if (result == true)
+                {
+                    // Restart to immediately send a ping request with the new settings
+                    _pingService.Stop();
+                    _pingService.Start();
+                }
+
+                _configurationWindow = null;
+            }
+            else
+            {
+                // The configuration window is a modal dialog so if it is already opened 
+                // push it to the foreground instead of creating a new window
+                ServiceManager.ActivateWindow(_configurationWindow);
             }
         }
 

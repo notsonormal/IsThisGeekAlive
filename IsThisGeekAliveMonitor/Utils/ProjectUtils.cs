@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -31,6 +32,13 @@ namespace IsThisGeekAliveMonitor.Utils
             {
                 registryKey.DeleteValue("AstoundingDock", false);
             }
+        }
+
+        public static string GetSettingsDirectory()
+        {
+            return Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "Is This Geek Alive Monitor");
         }
     }
 }

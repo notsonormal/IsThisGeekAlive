@@ -44,6 +44,11 @@ namespace IsThisGeekAliveMonitor.MvvmLightViewService
             return _instance.Get<IViewService>().OpenDialog(viewModel);
         }
 
+        public static bool ActivateWindow(ViewModelBase viewModel)
+        {
+            return _instance.Get<IViewService>().ActivateWindow(viewModel);
+        }
+
         T Register<T>(object service) where T : class
         {
             if (service == null)

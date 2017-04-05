@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using IsThisGeekAlive.Services;
 using Microsoft.Extensions.Logging;
 using IsThisGeekAlive.Models.Api;
+using MySql.Data.MySqlClient;
+using System.Net.Http;
 
 namespace IsThisGeekAlive.Controllers
 {
@@ -27,18 +29,33 @@ namespace IsThisGeekAlive.Controllers
 
         [HttpPost]
         [Route("login")]
-        public GeekLoginResult Login([FromBody]GeekLogin request)
+        public IActionResult Login([FromBody]GeekLogin request)
         {
             if (Log.IsEnabled(LogLevel.Debug))
                 Log.LogDebug("POST: /Api/Geeks/Ping");
 
-            _geekService.Login(request.Username, request.LoginCode, request.NotAliveWarningWindow,
-                request.NotAliveDangerWindow, request.LocalTime);
-
-            return new GeekLoginResult()
+            try
             {
 
-            };
+                _geekService.Login(request.Username, request.LoginCode, request.NotAliveWarningWindow,
+                    request.NotAliveDangerWindow, request.LocalTime);
+            }
+            catch (Exception ex) when (ex is ObjectDisposedException || ex is MySqlException)
+            {
+                try
+                {
+                    // The database connection occasionally times out when this is hosted on a free
+                    // Microsoft Azure instance. The second request should work
+                    _geekService.Login(request.Username, request.LoginCode, request.NotAliveWarningWindow,
+                        request.NotAliveDangerWindow, request.LocalTime);
+                }
+                catch (Exception ex2) when (ex2 is ObjectDisposedException || ex2 is MySqlException)
+                {
+                    return StatusCode(StatusCodes.Status504GatewayTimeout);
+                }
+            }
+
+            return Ok();
         }
 
     }

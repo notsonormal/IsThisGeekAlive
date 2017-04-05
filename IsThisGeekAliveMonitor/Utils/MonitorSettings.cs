@@ -10,7 +10,7 @@ namespace IsThisGeekAliveMonitor.Utils
 {
     public class MonitorSettings
     {
-        const string SettingsFilePath = "MonitorSettings.json";
+        const string SettingsFileName = "MonitorSettings.json";
 
         public MonitorSettings()
         {
@@ -30,26 +30,40 @@ namespace IsThisGeekAliveMonitor.Utils
         public int NotAliveDangerWindow { get; set; }
 
         public static MonitorSettings Load()
-        {            
-            if (!File.Exists(SettingsFilePath))
+        {
+            string settingsFilePath = Path.Combine(ProjectUtils.GetSettingsDirectory(), SettingsFileName);
+              
+            if (!File.Exists(settingsFilePath))
             {
                 return new MonitorSettings();
             }
 
-            string fileContents = File.ReadAllText(SettingsFilePath);
+            string fileContents = File.ReadAllText(settingsFilePath);
             return JsonConvert.DeserializeObject<MonitorSettings>(fileContents);
         }
 
         public void Save()
         {
             string fileContents = JsonConvert.SerializeObject(this);
-            
-            if (File.Exists(SettingsFilePath))
+
+            string settingsDirectory = ProjectUtils.GetSettingsDirectory();
+            string settingsFilePath = Path.Combine(settingsDirectory, SettingsFileName);
+            string settingsFileBackupPath = settingsFilePath + ".bak";
+
+            if (!Directory.Exists(settingsDirectory))
+                Directory.CreateDirectory(settingsDirectory);
+
+            if (File.Exists(settingsFilePath))
             {
-                File.Move(SettingsFilePath, SettingsFilePath + ".bak");
+                if (File.Exists(settingsFileBackupPath))
+                {
+                    File.Delete(settingsFileBackupPath);
+                }
+
+                File.Move(settingsFilePath, settingsFileBackupPath);
             }
 
-            File.WriteAllText(SettingsFilePath, fileContents);
+            File.WriteAllText(settingsFilePath, fileContents);
         }
     }
 }

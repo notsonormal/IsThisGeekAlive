@@ -57,6 +57,19 @@ else
                     </i>
                 </p>
             </div>
+
+            @if (Model.IsGmtInDaylightSaving)
+            {
+                <div class="small">
+                    <p>
+                        ***
+                        <i>
+                            The <a href="https://en.wikipedia.org/wiki/Greenwich_Mean_Time">GMT timezone</a> (i.e. Dublin, Edinburgh, Lisbon, London) is currently 
+                            under <a href="https://en.wikipedia.org/wiki/Daylight_saving_time">daylight savings time</a>. Meaning it is UTC +01:00.
+                        </i>
+                    </p>
+                </div>
+            }
         </div>
     </div>
 }

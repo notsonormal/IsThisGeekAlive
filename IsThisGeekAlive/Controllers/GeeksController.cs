@@ -43,11 +43,14 @@ namespace IsThisGeekAlive.Controllers
             if (Log.IsEnabled(LogLevel.Debug))
                 Log.LogDebug("GET: /Geeks/Index");
 
+            TimeZoneInfo gmtTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+
             var viewModel = new GeeksIndexViewModel()
             {
                 ManualLoginUsername = manualLoginUsername,
                 ManualLoginCode = manualLoginCode,
                 Message = message,
+                IsGmtInDaylightSaving = gmtTimeZone.IsDaylightSavingTime(DateTime.UtcNow)
             };
 
             GeekViewModel geekViewModel = GetGeek(username);
@@ -57,42 +60,6 @@ namespace IsThisGeekAlive.Controllers
             {
                 ModelState.AddModelError("Geek.Username", "No geek has been found with that username");
             }
-
-            /*
-            string sqlErrorMessage = "There was problem getting the details from the database. Please try reloading the page";
-            
-            try
-            {        
-                GeekViewModel geekViewModel = GetGeek(username);
-                viewModel.Geek = geekViewModel;
-
-                if (!string.IsNullOrWhiteSpace(username) && geekViewModel.GeekId == 0)
-                {
-                    ModelState.AddModelError("Geek.Username", "No geek has been found with that username");
-                }                    
-            }
-            catch (MySqlException ex)
-            {
-                Debug.WriteLine(ex.ToString());
-                _logger.LogError("Exception trying to get the geek from the database, {0}", ex);
-
-                ModelState.AddModelError("Geek.Username", sqlErrorMessage);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                Debug.WriteLine(ex.ToString());
-                _logger.LogError("Exception trying to get the geek from the database, {0}", ex);
-
-                if (ex.ObjectName == "System.Net.Sockets.Socket")
-                {
-                    ModelState.AddModelError("Geek.Username", sqlErrorMessage);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            */
 
             return View(viewModel);
         }
@@ -129,7 +96,9 @@ namespace IsThisGeekAlive.Controllers
                 $"and login code {viewModel.ManualLoginCode}";
 
             var geek = GetGeek(viewModel.ManualLoginUsername);
-            var localTime = new DateTimeOffset(DateTime.UtcNow, TimeSpan.FromMinutes(viewModel.ClientUtcOffset));
+
+            var localTime = new DateTimeOffset(DateTime.UtcNow).ToOffset(
+                TimeSpan.FromMinutes(viewModel.ClientUtcOffset));
 
             if (geek.DoesGeekExist)
             {
@@ -154,10 +123,7 @@ namespace IsThisGeekAlive.Controllers
                     Geek.DefaultNotAliveWarningWindow, Geek.DefaultNotAliveDangerWindow, localTime);
             }
 
-            return RedirectToAction("Index", new
-            {
-                message = successMessage,
-            });
+            return RedirectToAction("Index", new { message = successMessage });
         }
 
         bool ValidateManualLogin(GeeksIndexViewModel viewModel)

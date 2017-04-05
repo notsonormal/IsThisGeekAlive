@@ -12,7 +12,7 @@ namespace IsThisGeekAliveMonitor.MvvmLightViewService
     public class ViewService : IViewService
     {
         readonly Dictionary<Type, Type> _viewMap;
-        readonly List<Window> _openedWindows;
+        readonly List<Window> _openedWindows;        
 
         public ViewService()
         {
@@ -31,21 +31,27 @@ namespace IsThisGeekAliveMonitor.MvvmLightViewService
         }
 
         public void OpenWindow(ViewModelBase viewModel)
-        {
-            // Create window for that view tabModel.
+        {     
             Window window = CreateWindow(viewModel);
-
-            // Open the window.
             window.Dispatcher.Invoke(window.Show);
         }
 
         public bool? OpenDialog(ViewModelBase viewModel)
         {
-            // Create window for that view tabModel.
             Window window = CreateWindow(viewModel);
+            return window.Dispatcher.Invoke(window.ShowDialog);
+        }
 
-            // Open the window and return the result.
-            return window.Dispatcher.Invoke(window.ShowDialog);          
+        public bool ActivateWindow(ViewModelBase viewModel)
+        {
+            Window window = _openedWindows.SingleOrDefault(x => x.DataContext == viewModel);
+
+            if (window == null)
+            {
+                throw new ArgumentException("Window not opened");
+            }
+
+            return window.Dispatcher.Invoke(window.Activate);
         }
 
         Window CreateWindow(ViewModelBase viewModel)

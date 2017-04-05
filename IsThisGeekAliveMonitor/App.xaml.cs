@@ -6,6 +6,7 @@ using IsThisGeekAliveMonitor.Services;
 using IsThisGeekAliveMonitor.Utils;
 using IsThisGeekAliveMonitor.ViewModels;
 using IsThisGeekAliveMonitor.Views;
+using SimpleLogger.Logging.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -20,7 +21,7 @@ using System.Windows.Threading;
 namespace IsThisGeekAliveMonitor
 {
     public partial class App : Application
-    {
+    {        
         private TaskbarIcon _notifyIcon;
 
         static App()
@@ -33,16 +34,24 @@ namespace IsThisGeekAliveMonitor
             InitializeComponent();
             base.OnStartup(e);
 
+            SetupLogging();
+
             Application.Current.DispatcherUnhandledException += OnUnhandledException;
 
             SetupMvvmLightViewService();
-            SetupNotifyIcon();
+            SetupNotifyIcon();                  
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             _notifyIcon.Dispose();
             base.OnExit(e);
+        }
+
+        void SetupLogging()
+        {
+            var fileHandler = new FileLoggerHandler("IsThisGeekAliveMonitor.log.txt", ProjectUtils.GetSettingsDirectory());
+            SimpleLogger.Logger.LoggerHandlerManager.AddHandler(fileHandler);
         }
 
         void SetupMvvmLightViewService()
@@ -61,8 +70,8 @@ namespace IsThisGeekAliveMonitor
             {
                 if (!_notifyIcon.IsDisposed)
                 {
-                    _notifyIcon.ShowBalloonTip(null, m.ErrorMessage, BalloonIcon.Error);
-                }                
+                    _notifyIcon.ShowBalloonTip(null, m.ErrorMessage.ToString(), BalloonIcon.Error);
+                }
             });
         }
 
@@ -74,12 +83,13 @@ namespace IsThisGeekAliveMonitor
         void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             Debug.WriteLine(string.Format("Unhandled exception: {0}", e.Exception.ToString()));
+            SimpleLogger.Logger.Log(string.Format("Unhandled exception: {0}", e.Exception.ToString()));
 
             if (!_notifyIcon.IsDisposed)
             {
                 e.Dispatcher.Invoke(() =>
                 {
-                    _notifyIcon.ShowBalloonTip(null, e.Exception.Message, BalloonIcon.Error);
+                    _notifyIcon.ShowBalloonTip(null, e.Exception.ToString(), BalloonIcon.Error);
                 });
             };
 

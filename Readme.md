@@ -2,7 +2,9 @@
 
 ## Website
 
-The website is built using .NET Core 1.0. It is hosted an Microsoft Azure http://isthisgeekalive.azurewebsites.net/. It can, of course, be hosted somewhere else by anyone with a copy the source code. 
+The website is built using .NET Core 1.0. It is currently hosted on Microsoft Azure at http://isthisgeekalive.azurewebsites.net/. 
+
+It can, of course, be hosted somewhere else by anyone with a copy the source code. 
 
 ![Example website image](WebsiteExampleImage.png)
 

@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using IsThisGeekAliveMonitor.Models;
 using IsThisGeekAliveMonitor.Utils;
+using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace IsThisGeekAliveMonitor.Services
         BackgroundWorker _backgroundWorker;
 
         public GeekPingService()
-        {
+        {        
             _backgroundWorker = new BackgroundWorker();
             _backgroundWorker.WorkerSupportsCancellation = true;
             _backgroundWorker.DoWork += DoWork;
@@ -29,7 +30,7 @@ namespace IsThisGeekAliveMonitor.Services
             _pingTimer = new Timer();
             _pingTimer.Interval = TimeSpan.FromMinutes(pingInterval).TotalMilliseconds;
             _pingTimer.Elapsed += OnPingTimerElapsed;
-            _pingTimer.AutoReset = false;     
+            _pingTimer.AutoReset = false;
         }
 
         public void Start()
@@ -37,7 +38,10 @@ namespace IsThisGeekAliveMonitor.Services
             _pingTimer.Start();
 
             // Immediately send a ping request, rather than waiting for the timer
-            _backgroundWorker.RunWorkerAsync();
+            if (!_backgroundWorker.IsBusy)
+            {
+                _backgroundWorker.RunWorkerAsync();
+            }
         }
 
         public void Stop()
@@ -101,7 +105,10 @@ namespace IsThisGeekAliveMonitor.Services
             catch(Exception ex)
             {
                 Debug.WriteLine(string.Format("Ping failed exception: {0}", ex.ToString()));
+                SimpleLogger.Logger.Log(string.Format("Ping exception: {0}", ex.ToString()));
+
                 Messenger.Default.Send(new PingFailedMessage(ex.Message));
+
             }
         }
 
@@ -139,9 +146,12 @@ namespace IsThisGeekAliveMonitor.Services
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
+                SimpleLogger.Logger.Log(string.Format(
+                    "Did not get back a Http OK response for the ping, Content: {0}",
+                    response.Content));
+
                 throw new Exception(response.StatusDescription);
             }
         }
-
     }
 }
