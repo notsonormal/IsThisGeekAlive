@@ -14,6 +14,8 @@ The monitor application is built using .NET Framework 4.5.2 and Windows Presenta
 
 ![Example monitor image](MonitorExampleImage.png)
 
+The latest installer can be found [here](IsThisGeekAliveMonitor/InnoSetup/Output/IsThisGeekAliveMonitorSetup.exe)
+
 ##
 
 To contact me, you can find my email address on my github profile https://github.com/notsonormal.
