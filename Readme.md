@@ -12,9 +12,9 @@ It can, of course, be hosted somewhere else by anyone with a copy the source cod
 
 The monitor application is built using .NET Framework 4.5.2 and Windows Presentation Framework (WPF). 
 
-![Example monitor image](MonitorExampleImage.png)
-
 The latest installer can be found [here](IsThisGeekAliveMonitor/InnoSetup/Output/IsThisGeekAliveMonitorSetup.exe). Click the Download button to download the file to your PC.
+
+![Example monitor image](MonitorExampleImage.png)
 
 ##
 
